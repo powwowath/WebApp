@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>INSPINIA | Main view</title>
+
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="font-awesome/css/font-awesome.css" rel="stylesheet">
+
+    <link href="css/animate.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+
+    <link href="css/plugins/select2/select2.min.css" rel="stylesheet">
+	<link href="css/plugins/chosen/bootstrap-chosen.css" rel="stylesheet">
+
+
+</head>
+
+<body>
+<!-- URL:  www.example.com/correct/?message=done&year=1990 -->
+
+	<script src="js/jquery-3.1.1.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+
+<!-- Select2 -->
+<script src="js/plugins/select2/select2.full.min.js"></script>
+
+
+
+<div id="wrapper">
+
+    <nav class="navbar-default navbar-static-side" role="navigation">
+        <div class="sidebar-collapse">
+            <ul class="nav metismenu" id="side-menu">
+                <li class="nav-header">
+                    <div class="dropdown profile-element">
+                            <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                            <span class="clear"> <span class="block m-t-xs"> <strong class="font-bold"><big><big>BDMA</big></big></strong>
+							</span> <!--span class="text-muted text-xs block">Art Director <b class="caret"></b></span> </span--> </span></a>
+                            <ul class="dropdown-menu animated fadeInRight m-t-xs">
+                                <li><a href="#">Logout</a></li>
+                            </ul>
+                    </div>
+                    <div class="logo-element">
+                        IN+
+                    </div>
+                </li>
+                <li class="active">
+                    <a href="index.html"><i class="fa fa-plane"></i> <span class="nav-label">Search routes</span></a>
+                </li>
+                <li>
+                    <a href="minor.html"><i class="fa fa-lock"></i> <span class="nav-label">Control panel</span> </a>
+                </li>
+            </ul>
+
+        </div>
+    </nav>
+
+    <div id="page-wrapper" class="gray-bg">
+        <div class="row border-bottom">
+            <nav class="navbar navbar-static-top white-bg" role="navigation" style="margin-bottom: 0">
+                <div class="navbar-header">
+                    <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-bars"></i> </a>
+                </div>
+                <ul class="nav navbar-top-links navbar-right">
+					<li>
+						<span class="m-r-sm text-muted welcome-message" id="username"></span>
+					</li>
+					<li>
+                        <a href="start.html">
+                            <i class="fa fa-sign-out"></i> Log out
+                        </a>
+                    </li>
+                </ul>
+
+            </nav>
+        </div>
+        <div class="wrapper wrapper-content animated fadeInRight">
+			<div class="row">
+				<div class="col-lg-3">
+					<div class="widget style1 navy-bg">
+							<div class="row">
+								<div class="col-xs-5 text-center">
+									<i class="fa fa-heart fa-5x"></i>
+								</div>
+								<div class="col-xs-7 text-right">
+									<span>Route Likes</span>
+									<h2 class="font-bold">24</h2>
+								</div>
+							</div>
+					</div>
+				</div>
+				<div class="col-lg-3">
+					<div class="widget style1 navy-bg">
+						<div class="row">
+							<div class="col-xs-5">
+								<i class="fa fa-cloud fa-5x"></i>
+							</div>
+							<div class="col-xs-6 text-right">
+								<span> Today degrees </span>
+								<h2 class="font-bold">26'C</h2>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-3">
+					<div class="widget style1 navy-bg">
+						<div class="row">
+							<div class="col-xs-5">
+								<i class="fa fa-cloud fa-5x"></i>
+							</div>
+							<div class="col-xs-6 text-right">
+								<span> Today degrees </span>
+								<h2 class="font-bold">26'C</h2>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-3">
+					<div class="widget style1 navy-bg">
+						<div class="row">
+							<div class="col-xs-5">
+								<i class="fa fa-cloud fa-5x"></i>
+							</div>
+							<div class="col-xs-6 text-right">
+								<span> Today degrees </span>
+								<h2 class="font-bold">26'C</h2>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>		
+		
+		
+            <!--div class="row">
+                <div class="col-lg-12">
+                    <div class="text-center m-t-lg">
+                        <h1>
+                            Welcome in INSPINIA Static SeedProject
+                        </h1>
+                        <small>
+                            It is an application skeleton for a typical web app. You can use it to quickly bootstrap your webapp projects and dev environment for these projects.
+                        </small>
+                    </div>
+                </div>
+            </div-->
+
+			<div class="row">
+				<div class="col-lg-6">
+					<div class="ibox float-e-margins">
+						<div class="ibox-title">
+							<h5>Search routes</h5>
+							<div class="ibox-tools">
+								<a class="collapse-link">
+									<i class="fa fa-chevron-up"></i>
+								</a>
+								<a class="close-link">
+									<i class="fa fa-times"></i>
+								</a>
+							</div>
+						</div>
+						<div class="ibox-content">
+							<form id="searchForm" class="form-horizontal">
+								<div class="form-group">
+									<label class="font-normal">Departure</label>
+									<div>
+										<select id="city" name="city" data-placeholder="Choose a city..." class="chosen-select"  tabindex="2">
+											<option value="">Select a city</option>
+										</select>
+										&#160;&#160;<input id="round" type="checkbox" value="" checked="1"> Round trip</label>
+									</div>
+								</div>
+
+								<div class="form-group">
+									<label class="font-normal">Number of steps</label>
+									<div>
+										<select id="steps" name="steps" data-placeholder="Number of steps..." class="chosen-select"  tabindex="2">
+											<option value="1">1</option>
+											<option value="2">2</option>
+											<option value="3">3</option>
+											<option value="4">4</option>
+											<option value="5">5</option>
+										</select>
+										&#160;&#160;<input type="checkbox" value="" checked="1"> Round trip</label>
+									</div>
+								</div>
+
+								<div class="form-group">
+									<div class="col-lg-offset-2 col-lg-10">
+										<button class="btn btn-sm btn-white" type="submit">Search</button>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+
+				<!--
+				 You need to include this script on any page that has a Google Map.
+				 When using Google Maps on your own site you MUST signup for your own API key at:
+				 https://developers.google.com/maps/documentation/javascript/tutorial#api_key
+				 After your sign up replace the key in the URL below..
+				-->
+				<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDQTpXj82d8UpCi97wzo_nKXL7nYrd4G70"></script>
+
+
+
+				<div class="col-md-6">
+					<div class="col-md-12">
+						<div class="ibox">
+							<div class="ibox-content product-box">
+								<div class="product-desc">
+									<small class="text-muted"></small>
+									<a href="#" class="product-name"> Barcelona - París - Milan - Barcelona</a>
+
+									<div class="small m-t-xs">
+										Countries: 3
+									</div>
+									<div class="m-t text-righ">
+										<a href="#" id="map_b1" class="btn btn-outline btn-info btn-xs"><i class="fa fa-plane"></i>&#160;Map</a>
+										<a href="#" class="btn btn-danger btn-xs"><i class="fa fa-heart"></i>&#160;Like</a>
+										<br/>&#160;
+									</div>
+									<div id="map_d1"></div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-12">
+						<div class="ibox">
+							<div class="ibox-content product-box">
+								<div class="product-desc">
+									<small class="text-muted"></small>
+									<a href="#" class="product-name"> Barcelona - París - Milan - Barcelona</a>
+
+									<div class="small m-t-xs">
+										Countries: 3
+									</div>
+									<div class="m-t text-righ">
+										<a href="#" class="btn btn-outline btn-info btn-xs"><i class="fa fa-plane"></i>&#160;Map</a>
+										<a href="#" class="btn btn-danger btn-xs"><i class="fa fa-heart"></i>&#160;Like</a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-12">
+						<div class="ibox">
+							<div class="ibox-content product-box">
+								<div class="product-desc">
+									<small class="text-muted"></small>
+									<a href="#" class="product-name"> Barcelona - París - Milan - Barcelona</a>
+
+									<div class="small m-t-xs">
+										Countries: 3
+									</div>
+									<div class="m-t text-righ">
+										<a href="#" class="btn btn-outline btn-info btn-xs"><i class="fa fa-plane"></i>&#160;Map</a>
+										<a href="#" class="btn btn-danger btn-xs"><i class="fa fa-heart"></i>&#160;Like</a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-12">
+						<div class="ibox">
+							<div class="ibox-content product-box">
+								<div class="product-desc">
+									<small class="text-muted"></small>
+									<a href="#" class="product-name"> Barcelona - París - Milan - Barcelona</a>
+
+									<div class="small m-t-xs">
+										Countries: 3
+									</div>
+									<div class="m-t text-righ">
+										<a href="#" class="btn btn-outline btn-info btn-xs"><i class="fa fa-plane"></i>&#160;Map</a>
+										<a href="#" class="btn btn-danger btn-xs"><i class="fa fa-heart"></i>&#160;Like</a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-12">
+						<div class="ibox">
+							<div class="ibox-content product-box">
+								<div class="product-desc">
+									<small class="text-muted"></small>
+									<a href="#" class="product-name"> Barcelona - París - Milan - Barcelona</a>
+
+									<div class="small m-t-xs">
+										Countries: 3
+									</div>
+									<div class="m-t text-righ">
+										<a href="#" class="btn btn-outline btn-info btn-xs"><i class="fa fa-plane"></i>&#160;Map</a>
+										<a href="#" class="btn btn-danger btn-xs"><i class="fa fa-heart"></i>&#160;Like</a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-12">
+						<div class="ibox">
+							<div class="ibox-content product-box">
+								<div class="product-desc">
+									<small class="text-muted"></small>
+									<a href="#" class="product-name"> Barcelona - París - Milan - Barcelona</a>
+
+									<div class="small m-t-xs">
+										Countries: 3
+									</div>
+									<div class="m-t text-righ">
+										<a href="#" class="btn btn-outline btn-info btn-xs"><i class="fa fa-plane"></i>&#160;Map</a>
+										<a href="#" class="btn btn-danger btn-xs"><i class="fa fa-heart"></i>&#160;Like</a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+		<!-- Results -->
+			<div class="row">
+
+			</div>
+		</div>
+
+
+
+
+
+
+        <div class="footer">
+            <div class="pull-right">
+                Oscar Hortelano - Ricardo Oliveira - Gerard Font
+            </div>
+            <div>
+                <strong>Copyright</strong> BDMA &copy; 2016-2017
+            </div>
+        </div>
+
+    </div>
+</div>
+
+	<!-- Mainly scripts -->
+	<script src="js/jquery-3.1.1.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/plugins/metisMenu/jquery.metisMenu.js"></script>
+	<script src="js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+
+	<!-- Custom and plugin javascript -->
+	<script src="js/inspinia.js"></script>
+	<script src="js/plugins/pace/pace.min.js"></script>
+	<!-- Chosen -->
+	<script src="js/plugins/chosen/chosen.jquery.js"></script>
+
+			
+	<script type="text/javascript">
+        $(document).ready(function(){
+        	var urlParams = new URLSearchParams(window.location.search);
+        	$("#username").html(urlParams.get('name'));
+
+			$('.chosen-select').chosen({width: "50%"});
+			$("#steps").chosen({disable_search_threshold: 10});
+
+
+
+			// USPERT User -----------------------------------------------------------------------------
+			$.ajax({
+				headers: {
+					'Accept': 'application/json',
+					'Content-Type': 'application/json'
+				},
+				url: '/users',
+				type: 'post',
+				dataType: 'json',
+				success: function (data) {
+					//
+				},
+				data: JSON.stringify(urlParams.get('name'))
+        	});
+
+
+			// Inital city search -----------------------------------------------------------------------------
+			$.get("/cities", function(data){
+				$.each(data, function(i, item) {
+					var o = new Option(data[i].name, data[i].name);
+					$(o).html(data[i].name + " (" +data[i].country+ ")");
+					$("#city").append(o);
+				});
+				$('#city').trigger("chosen:updated");
+			});
+
+			// maps
+			$( "#map_b1" ).click(function() {
+				var mapOptions1 = {
+					zoom: 11,
+					center: new google.maps.LatLng(40.6700, -73.9400),
+					// Style for Google Maps
+					styles: [{"featureType":"water","stylers":[{"saturation":43},{"lightness":-11},{"hue":"#0088ff"}]},{"featureType":"road","elementType":"geometry.fill","stylers":[{"hue":"#ff0000"},{"saturation":-100},{"lightness":99}]},{"featureType":"road","elementType":"geometry.stroke","stylers":[{"color":"#808080"},{"lightness":54}]},{"featureType":"landscape.man_made","elementType":"geometry.fill","stylers":[{"color":"#ece2d9"}]},{"featureType":"poi.park","elementType":"geometry.fill","stylers":[{"color":"#ccdca1"}]},{"featureType":"road","elementType":"labels.text.fill","stylers":[{"color":"#767676"}]},{"featureType":"road","elementType":"labels.text.stroke","stylers":[{"color":"#ffffff"}]},{"featureType":"poi","stylers":[{"visibility":"off"}]},{"featureType":"landscape.natural","elementType":"geometry.fill","stylers":[{"visibility":"on"},{"color":"#b8cb93"}]},{"featureType":"poi.park","stylers":[{"visibility":"on"}]},{"featureType":"poi.sports_complex","stylers":[{"visibility":"on"}]},{"featureType":"poi.medical","stylers":[{"visibility":"on"}]},{"featureType":"poi.business","stylers":[{"visibility":"simplified"}]}]
+				};
+
+				// Create the Google Map using elements
+				$("#map_d1").css('width', '100%');
+				$("#map_d1").css('height', '250px');
+				var map = new google.maps.Map(document.getElementById("map_d1"), mapOptions1);
+			});
+
+
+
+			// Perform SEARCH -----------------------------------------------------------------------------
+			$( "#searchForm" ).submit(function( event ) {
+				var query = "/routecandidates?";
+				query += "departureCity=" + $("#city").val();
+				query += "&steps=" + $("#steps").val();
+
+				if($("#round").prop("checked")){
+					query += "&destinationCity=" + $("#city").val();
+				}
+
+				$.get(query, function(data){
+					$.each(data, function(i, item) {
+/*
+						// Results
+						var o = new Option(data[i].name, data[i].name);
+						$(o).html(data[i].name + " (" +data[i].country+ ")");
+*/
+					});
+				});
+
+				event.preventDefault();
+			});
+
+		});
+	</script>
+</body>
+
+</html>
