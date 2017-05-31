@@ -11,16 +11,16 @@ import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
 
 @NodeEntity
-public class User {
+public class RouteOLD {
 
     @GraphId private Long id;
     private String name;
 
-    private User() {
+    private RouteOLD() {
         // Empty constructor required as of Neo4j API 2.0.5
     };
 
-    public User(String name) {
+    public RouteOLD(String name) {
         this.name = name;
     }
 
@@ -29,21 +29,22 @@ public class User {
      * to ignore the direction of the relationship.
      * https://dzone.com/articles/modelling-data-neo4j
      */
-    @Relationship(type = "likes", direction = Relationship.UNDIRECTED)
-    public Set<RouteOLD> routes;
+    @Relationship(type = "is", direction = Relationship.UNDIRECTED)
+    public Set<RouteType> routeTypes;
 
-    public void likes(RouteOLD route) {
-        if (routes == null) {
-            routes = new HashSet<>();
+    public void is(RouteType routeType) {
+        if (routeTypes == null) {
+            routeTypes = new HashSet<>();
         }
-        routes.add(route);
+        routeTypes.add(routeType);
     }
 
     public String toString() {
-        return this.name + " likes => "
-                + Optional.ofNullable(this.routes).orElse(
+
+        return this.name + " is => "
+                + Optional.ofNullable(this.routeTypes).orElse(
                 Collections.emptySet()).stream().map(
-                route -> route.getName()).collect(Collectors.toList());
+                routeType -> routeType.getName()).collect(Collectors.toList());
     }
 
     public String getName() {

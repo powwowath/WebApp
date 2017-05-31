@@ -6,7 +6,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>INSPINIA | Main view</title>
+    <title>BDMA 2016 - 2017</title>
 
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="font-awesome/css/font-awesome.css" rel="stylesheet">
@@ -165,32 +165,85 @@
 						</div>
 						<div class="ibox-content">
 							<form id="searchForm" class="form-horizontal">
-								<div class="form-group">
-									<label class="font-normal">Departure</label>
-									<div>
-										<select id="city" name="city" data-placeholder="Choose a city..." class="chosen-select"  tabindex="2">
-											<option value="">Select a city</option>
-										</select>
-										&#160;&#160;<input id="round" type="checkbox" value="" checked="1"> Round trip</label>
-									</div>
+
+								<label class="font-normal"><b>Departure</b></label>
+								<div>
+									<select id="city" name="city" data-placeholder="Choose a city..." class="chosen-select"  tabindex="2">
+										<option value="">Select a city</option>
+									</select>
+									&#160;&#160;<input id="round" type="checkbox" value="" checked="1"> Round trip</label>
 								</div>
+								<br/><br/>
+
+								<label class="font-normal"><b>Number of steps</b></label>
+								<div>
+									<select id="steps" name="steps" data-placeholder="Number of steps..." class="chosen-select col-md-2"  tabindex="2">
+										<option value="1">1</option>
+										<option value="2">2</option>
+										<option value="3">3</option>
+										<option value="4">4</option>
+										<option value="5">5</option>
+									</select>
+								</div>
+								<br/><br/>
+
+								<!--label class="font-normal"><b>Region</b></label>
+								<div>
+									<select id="region" name="region" data-placeholder="Region" class="chosen-select col-md-2"  tabindex="2">
+										<option value="">Worldwide</option>
+										<option value="Africa">Africa</option>
+										<option value="America">America</option>
+										<option value="Arctic">Arctic</option>
+										<option value="Asia">Asia</option>
+										<option value="Atlantic">Atlantic</option>
+										<option value="Australia">Australia</option>
+										<option value="Europe">Europe</option>
+										<option value="Pacific">Pacific</option>
+										<option value="Indian">Indian</option>
+									</select>
+								</div>
+								<br/><br/-->
+
+								<p><b>Interests (max 2)</b></p>
+								<div class="checkbox checkbox-inline">
+									&#160;&#160;&#160;&#160;<input type="checkbox" id="checkCulture" value="option1">Cultural
+								</div>
+								<div class="checkbox checkbox-success checkbox-inline">
+									&#160;&#160;&#160;&#160;<input type="checkbox" id="checkNight" value="option1">Nightlife
+								</div>
+								<div class="checkbox checkbox-success checkbox-inline">
+									&#160;&#160;&#160;&#160;<input type="checkbox" id="checkBeach" value="option1">Beach
+								</div>
+								<div class="checkbox checkbox-inline">
+									&#160;&#160;&#160;&#160;<input type="checkbox" id="checkMountain" value="option1">Mountain
+								</div>
+								<div class="checkbox checkbox-success checkbox-inline">
+									&#160;&#160;&#160;&#160;<input type="checkbox" id="checkTurist" value="option1">Tourist city
+								</div>
+								<br/><br/>
+
+								<p><b>Type of destination</b></p>
+								<div class="checkbox checkbox-inline">
+									&#160;&#160;&#160;&#160;<input type="checkbox" id="checkCulture" value="option1">Only Big cities
+								</div>
+								<div class="checkbox checkbox-inline">
+									&#160;&#160;&#160;&#160;<input type="checkbox" id="checkCulture" value="option1">Only Small cities
+								</div>
+								<br/><br/>
+
+								<label class="font-normal"><b>Max distance (in KM)</b></label>
+								<div>
+									<select id="distance" name="distance" data-placeholder="Max distance (in KM)" class="chosen-select col-md-2"  tabindex="2">
+										<option value="S">Short (&lt; 2.000)</option>
+										<option value="M">Medium (2.000 - 5.000)</option>
+										<option value="L">Large (5.000 - 15.000)</option>
+										<option value="W">Willy Fog (&gt; 15.000)</option>
+									</select>
+								</div>
+								<br/><br/>
 
 								<div class="form-group">
-									<label class="font-normal">Number of steps</label>
-									<div>
-										<select id="steps" name="steps" data-placeholder="Number of steps..." class="chosen-select"  tabindex="2">
-											<option value="1">1</option>
-											<option value="2">2</option>
-											<option value="3">3</option>
-											<option value="4">4</option>
-											<option value="5">5</option>
-										</select>
-										&#160;&#160;<input type="checkbox" value="" checked="1"> Round trip</label>
-									</div>
-								</div>
-
-								<div class="form-group">
-									<div class="col-lg-offset-2 col-lg-10">
+									<div class="col-lg-10">
 										<button class="btn btn-sm btn-white" type="submit">Search</button>
 									</div>
 								</div>
@@ -210,15 +263,15 @@
 
 
 				<div class="col-md-6">
-					<div class="col-md-12">
+					<div class="col-md-12" id="route1">
 						<div class="ibox">
 							<div class="ibox-content product-box">
 								<div class="product-desc">
 									<small class="text-muted"></small>
-									<a href="#" class="product-name"> Barcelona - París - Milan - Barcelona</a>
+									<a href="#" class="product-name" id="routeName1"></a>
 
 									<div class="small m-t-xs">
-										Countries: 3
+										Countries: <div id="nCountries1"></div>
 									</div>
 									<div class="m-t text-righ">
 										<a href="#" id="map_b1" class="btn btn-outline btn-info btn-xs"><i class="fa fa-plane"></i>&#160;Map</a>
@@ -230,96 +283,107 @@
 							</div>
 						</div>
 					</div>
-					<div class="col-md-12">
+					<div class="col-md-12" id="route2">
 						<div class="ibox">
 							<div class="ibox-content product-box">
 								<div class="product-desc">
 									<small class="text-muted"></small>
-									<a href="#" class="product-name"> Barcelona - París - Milan - Barcelona</a>
+									<a href="#" class="product-name" id="routeName2"></a>
 
 									<div class="small m-t-xs">
-										Countries: 3
+										Countries: <div id="nCountries2"></div>
 									</div>
 									<div class="m-t text-righ">
-										<a href="#" class="btn btn-outline btn-info btn-xs"><i class="fa fa-plane"></i>&#160;Map</a>
+										<a href="#" id="map_b2" class="btn btn-outline btn-info btn-xs"><i class="fa fa-plane"></i>&#160;Map</a>
 										<a href="#" class="btn btn-danger btn-xs"><i class="fa fa-heart"></i>&#160;Like</a>
+										<br/>&#160;
 									</div>
+									<div id="map_d2"></div>
 								</div>
 							</div>
 						</div>
 					</div>
-					<div class="col-md-12">
+					<div class="col-md-12" id="route3">
 						<div class="ibox">
 							<div class="ibox-content product-box">
 								<div class="product-desc">
 									<small class="text-muted"></small>
-									<a href="#" class="product-name"> Barcelona - París - Milan - Barcelona</a>
+									<a href="#" class="product-name" id="routeName3"></a>
 
 									<div class="small m-t-xs">
-										Countries: 3
+										Countries: <div id="nCountries3"></div>
 									</div>
 									<div class="m-t text-righ">
-										<a href="#" class="btn btn-outline btn-info btn-xs"><i class="fa fa-plane"></i>&#160;Map</a>
+										<a href="#" id="map_b3" class="btn btn-outline btn-info btn-xs"><i class="fa fa-plane"></i>&#160;Map</a>
 										<a href="#" class="btn btn-danger btn-xs"><i class="fa fa-heart"></i>&#160;Like</a>
+										<br/>&#160;
 									</div>
+									<div id="map_d3"></div>
 								</div>
 							</div>
 						</div>
 					</div>
-					<div class="col-md-12">
+					<div class="col-md-12" id="route4">
 						<div class="ibox">
 							<div class="ibox-content product-box">
 								<div class="product-desc">
 									<small class="text-muted"></small>
-									<a href="#" class="product-name"> Barcelona - París - Milan - Barcelona</a>
+									<a href="#" class="product-name" id="routeName4"></a>
 
 									<div class="small m-t-xs">
-										Countries: 3
+										Countries: <div id="nCountries4"></div>
 									</div>
 									<div class="m-t text-righ">
-										<a href="#" class="btn btn-outline btn-info btn-xs"><i class="fa fa-plane"></i>&#160;Map</a>
+										<a href="#" id="map_b4" class="btn btn-outline btn-info btn-xs"><i class="fa fa-plane"></i>&#160;Map</a>
 										<a href="#" class="btn btn-danger btn-xs"><i class="fa fa-heart"></i>&#160;Like</a>
+										<br/>&#160;
 									</div>
+									<div id="map_d4"></div>
 								</div>
 							</div>
 						</div>
 					</div>
-					<div class="col-md-12">
+					<div class="col-md-12" id="route5">
 						<div class="ibox">
 							<div class="ibox-content product-box">
 								<div class="product-desc">
 									<small class="text-muted"></small>
-									<a href="#" class="product-name"> Barcelona - París - Milan - Barcelona</a>
+									<a href="#" class="product-name" id="routeName5"></a>
 
 									<div class="small m-t-xs">
-										Countries: 3
+										Countries: <div id="nCountries5"></div>
 									</div>
 									<div class="m-t text-righ">
-										<a href="#" class="btn btn-outline btn-info btn-xs"><i class="fa fa-plane"></i>&#160;Map</a>
+										<a href="#" id="map_b5" class="btn btn-outline btn-info btn-xs"><i class="fa fa-plane"></i>&#160;Map</a>
 										<a href="#" class="btn btn-danger btn-xs"><i class="fa fa-heart"></i>&#160;Like</a>
+										<br/>&#160;
 									</div>
+									<div id="map_d5"></div>
 								</div>
 							</div>
 						</div>
 					</div>
-					<div class="col-md-12">
+					<div class="col-md-12" id="route6">
 						<div class="ibox">
 							<div class="ibox-content product-box">
 								<div class="product-desc">
 									<small class="text-muted"></small>
-									<a href="#" class="product-name"> Barcelona - París - Milan - Barcelona</a>
+									<a href="#" class="product-name" id="routeName6"></a>
 
 									<div class="small m-t-xs">
-										Countries: 3
+										Countries: <div id="nCountries6"></div>
 									</div>
 									<div class="m-t text-righ">
-										<a href="#" class="btn btn-outline btn-info btn-xs"><i class="fa fa-plane"></i>&#160;Map</a>
+										<a href="#" id="map_b6" class="btn btn-outline btn-info btn-xs"><i class="fa fa-plane"></i>&#160;Map</a>
 										<a href="#" class="btn btn-danger btn-xs"><i class="fa fa-heart"></i>&#160;Like</a>
+										<br/>&#160;
 									</div>
+									<div id="map_d6"></div>
 								</div>
 							</div>
 						</div>
 					</div>
+
 				</div>
 			</div>
 
@@ -361,7 +425,24 @@
 
 			
 	<script type="text/javascript">
+		function zoomToObject(obj){
+			var bounds = new google.maps.LatLngBounds();
+			var points = obj.getPath().getArray();
+			for (var n = 0; n < points.length ; n++){
+				bounds.extend(points[n]);
+			}
+			return bounds;
+		}
+
+
         $(document).ready(function(){
+        	$("#route1").hide();
+        	$("#route2").hide();
+        	$("#route3").hide();
+        	$("#route4").hide();
+        	$("#route5").hide();
+        	$("#route6").hide();
+
         	var urlParams = new URLSearchParams(window.location.search);
         	$("#username").html(urlParams.get('name'));
 
@@ -397,19 +478,32 @@
 			});
 
 			// maps
-			$( "#map_b1" ).click(function() {
-				var mapOptions1 = {
-					zoom: 11,
-					center: new google.maps.LatLng(40.6700, -73.9400),
-					// Style for Google Maps
-					styles: [{"featureType":"water","stylers":[{"saturation":43},{"lightness":-11},{"hue":"#0088ff"}]},{"featureType":"road","elementType":"geometry.fill","stylers":[{"hue":"#ff0000"},{"saturation":-100},{"lightness":99}]},{"featureType":"road","elementType":"geometry.stroke","stylers":[{"color":"#808080"},{"lightness":54}]},{"featureType":"landscape.man_made","elementType":"geometry.fill","stylers":[{"color":"#ece2d9"}]},{"featureType":"poi.park","elementType":"geometry.fill","stylers":[{"color":"#ccdca1"}]},{"featureType":"road","elementType":"labels.text.fill","stylers":[{"color":"#767676"}]},{"featureType":"road","elementType":"labels.text.stroke","stylers":[{"color":"#ffffff"}]},{"featureType":"poi","stylers":[{"visibility":"off"}]},{"featureType":"landscape.natural","elementType":"geometry.fill","stylers":[{"visibility":"on"},{"color":"#b8cb93"}]},{"featureType":"poi.park","stylers":[{"visibility":"on"}]},{"featureType":"poi.sports_complex","stylers":[{"visibility":"on"}]},{"featureType":"poi.medical","stylers":[{"visibility":"on"}]},{"featureType":"poi.business","stylers":[{"visibility":"simplified"}]}]
-				};
+			var map = [];
 
-				// Create the Google Map using elements
+//			$( "#map_b1" ).click(function() {
 				$("#map_d1").css('width', '100%');
 				$("#map_d1").css('height', '250px');
-				var map = new google.maps.Map(document.getElementById("map_d1"), mapOptions1);
-			});
+//			});
+//			$( "#map_b2" ).click(function() {
+				$("#map_d2").css('width', '100%');
+				$("#map_d2").css('height', '250px');
+//			});
+//			$( "#map_b3" ).click(function() {
+				$("#map_d3").css('width', '100%');
+				$("#map_d3").css('height', '250px');
+//			});
+//			$( "#map_b4" ).click(function() {
+				$("#map_d4").css('width', '100%');
+				$("#map_d4").css('height', '250px');
+//			});
+//			$( "#map_b5" ).click(function() {
+				$("#map_d5").css('width', '100%');
+				$("#map_d5").css('height', '250px');
+//			});
+//			$( "#map_b6" ).click(function() {
+				$("#map_d6").css('width', '100%');
+				$("#map_d6").css('height', '250px');
+//			});
 
 
 
@@ -423,13 +517,72 @@
 					query += "&destinationCity=" + $("#city").val();
 				}
 
+				$("#route1").hide();
+				$("#route2").hide();
+				$("#route3").hide();
+				$("#route4").hide();
+				$("#route5").hide();
+				$("#route6").hide();
+				$("#routeName1").html("");
+				$("#routeName2").html("");
+				$("#routeName3").html("");
+				$("#routeName4").html("");
+				$("#routeName5").html("");
+				$("#routeName6").html("");
+
 				$.get(query, function(data){
 					$.each(data, function(i, item) {
-/*
-						// Results
-						var o = new Option(data[i].name, data[i].name);
-						$(o).html(data[i].name + " (" +data[i].country+ ")");
+						$("#routeName"+(i+1)).html(data[i].name);
+						$("#route"+(i+1)).show();
+
+						var flightPlanCoordinates = [];
+						for (var j=0; j<item.lat.length; j++){
+							flightPlanCoordinates.push( new google.maps.LatLng(parseFloat(item.lat[j]), parseFloat(item.lon[j])) );
+//							flightPlanCoordinates.push({lat:parseFloat(item.lat[j]), lng: parseFloat(item.lon[j])});
+//							flightPlanCoordinates.push("{lat:"+item.lat[j]+", lng: "+item.lon[j]+"}");
+						}
+/*						var flightPlanCoordinates = [
+						  {lat: 37.772, lng: -122.214},
+						  {lat: 21.291, lng: -157.821},
+						  {lat: -18.142, lng: 178.431},
+						  {lat: -27.467, lng: 153.027}
+						];
 */
+						var flightPath = new google.maps.Polyline({
+						  path: flightPlanCoordinates,
+						  geodesic: true,
+						  strokeColor: '#FF0000',
+						  strokeOpacity: 1.0,
+						  strokeWeight: 2
+						});
+
+
+						var mapOptions = {
+							zoom: 2,
+							center: new google.maps.LatLng(30.0509, -21.2),
+							// Style for Google Maps
+							styles: [{"featureType":"water","stylers":[{"saturation":43},{"lightness":-11},{"hue":"#0088ff"}]},{"featureType":"road","elementType":"geometry.fill","stylers":[{"hue":"#ff0000"},{"saturation":-100},{"lightness":99}]},{"featureType":"road","elementType":"geometry.stroke","stylers":[{"color":"#808080"},{"lightness":54}]},{"featureType":"landscape.man_made","elementType":"geometry.fill","stylers":[{"color":"#ece2d9"}]},{"featureType":"poi.park","elementType":"geometry.fill","stylers":[{"color":"#ccdca1"}]},{"featureType":"road","elementType":"labels.text.fill","stylers":[{"color":"#767676"}]},{"featureType":"road","elementType":"labels.text.stroke","stylers":[{"color":"#ffffff"}]},{"featureType":"poi","stylers":[{"visibility":"off"}]},{"featureType":"landscape.natural","elementType":"geometry.fill","stylers":[{"visibility":"on"},{"color":"#b8cb93"}]},{"featureType":"poi.park","stylers":[{"visibility":"on"}]},{"featureType":"poi.sports_complex","stylers":[{"visibility":"on"}]},{"featureType":"poi.medical","stylers":[{"visibility":"on"}]},{"featureType":"poi.business","stylers":[{"visibility":"simplified"}]}]
+						};
+						map[i] = new google.maps.Map(document.getElementById("map_d"+(i+1)), mapOptions);
+
+/*
+			map = new google.maps.Map(document.getElementById("map_d1"), mapOptions1);
+			map.push(map1);
+			map2 = new google.maps.Map(document.getElementById("map_d2"), mapOptions1);
+			map.push(map2);
+			map3 = new google.maps.Map(document.getElementById("map_d3"), mapOptions1);
+			map.push(map3);
+			map4 = new google.maps.Map(document.getElementById("map_d4"), mapOptions1);
+			map.push(map4);
+			map5 = new google.maps.Map(document.getElementById("map_d5"), mapOptions1);
+			map.push(map5);
+			map6 = new google.maps.Map(document.getElementById("map_d6"), mapOptions1);
+			map.push(map6);
+*/
+
+						flightPath.setMap(map[i]);
+						map[i].fitBounds(zoomToObject(flightPath));
+
 					});
 				});
 
