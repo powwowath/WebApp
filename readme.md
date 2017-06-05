@@ -4,4 +4,4 @@ Modificar fichero
 Compilar con maven y ejecutar como una aplicación Java
 Antes de ejecutar la aplicación debeis tener arrancado el Neo4j
 
-Una vez arrancado: http://localhost:8080
+Una vez arrancado: http://localhost:8080/start.html
