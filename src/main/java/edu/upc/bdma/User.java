@@ -30,9 +30,9 @@ public class User {
      * https://dzone.com/articles/modelling-data-neo4j
      */
     @Relationship(type = "likes", direction = Relationship.UNDIRECTED)
-    public Set<RouteOLD> routes;
+    public Set<Route> routes;
 
-    public void likes(RouteOLD route) {
+    public void likes(Route route) {
         if (routes == null) {
             routes = new HashSet<>();
         }

@@ -18,9 +18,6 @@ public class Neo4JService {
 
     Driver driver = GraphDatabase.driver( "bolt://localhost:7687", AuthTokens.basic( USERNAME, PASSWORD ) );
 
-
-
-
     public List<Route> getRoutesN(
             String departure,
             String departureCountry,
@@ -118,31 +115,31 @@ public class Neo4JService {
                 String lat[] = new String[steps+extraPoints];
 
                 // Departrue
-                String routeName = rl.get(i).get(0).get("name").asString() + " (" +rl.get(i).get(0).get("name").asString()+ ")";
+                String routeName = rl.get(i).get(0).get("name").asString() + " (" +rl.get(i).get(0).get("country").asString()+ ")";
                 lon[0] = ""+rl.get(i).get(1).get("lon");
                 lat[0] = ""+rl.get(i).get(1).get("lat");
                 step.setName(rl.get(i).get(0).get("name").asString());
-                step.setCountry(rl.get(i).get(0).get("name").asString());
+                step.setCountry(rl.get(i).get(0).get("country").asString());
                 rSteps.add(step);
 
                 for (int j = 1; j <= steps; j++){
-                    routeName += " - " + rl.get(i).get(j).get("name").asString() + " (" +rl.get(i).get(j).get("name").asString()+ ")";
+                    routeName += " - " + rl.get(i).get((j*2)).get("name").asString() + " (" +rl.get(i).get((j*2)).get("country").asString()+ ")";
                     lon[j] = "" + rl.get(i).get((j*2)+1).get("lon");
                     lat[j] = "" + rl.get(i).get((j*2)+1).get("lat");
 
                     step = new City();
-                    step.setName(rl.get(i).get(j).get("name").asString());
-                    step.setCountry(rl.get(i).get(j).get("name").asString());
+                    step.setName(rl.get(i).get(j*2).get("name").asString());
+                    step.setCountry(rl.get(i).get(j*2).get("country").asString());
                     rSteps.add(step);
                 }
 
                 if (isRound) {
-                    routeName += " - " + rl.get(i).get(0).get("name").asString() + " (" + rl.get(i).get(0).get("name").asString() + ")";
+                    routeName += " - " + rl.get(i).get(0).get("name").asString() + " (" + rl.get(i).get(0).get("country").asString() + ")";
                     lon[steps + 1] = ""+rl.get(i).get(1).get("lon");
                     lat[steps + 1] = ""+rl.get(i).get(1).get("lat");
 
                     step.setName(rl.get(i).get(0).get("name").asString());
-                    step.setCountry(rl.get(i).get(0).get("name").asString());
+                    step.setCountry(rl.get(i).get(0).get("country").asString());
                     rSteps.add(step);
                 }
                 r.setName(routeName);

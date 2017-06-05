@@ -24,7 +24,16 @@ public class UserController {
     @ResponseStatus( HttpStatus.CREATED )
     @ResponseBody
     public User insertUser(@RequestBody User user) {
-        userRepository.save(user);
+        User temp = userRepository.findByName(user.getName());
+        if(temp == null){
+            userRepository.save(user);
+        }
         return user;
     }
+
+    @RequestMapping("/count")
+    public long countRoutes() {
+        return userRepository.count();
+    }
+
 }

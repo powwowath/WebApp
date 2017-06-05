@@ -19,4 +19,9 @@ public class CityController {
         return IteratorUtils.toList(cityRepository.findAll(new Sort(Sort.Direction.ASC, "name")).iterator());
     }
 
+    @RequestMapping("/count")
+    public long countCities() {
+        return cityRepository.count();
+    }
+
 }
