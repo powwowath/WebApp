@@ -12,7 +12,7 @@ import java.util.Arrays;
 public class Application {
     public static void main(String[] args) {
         ApplicationContext ctx = SpringApplication.run(Application.class, args);
-
+/*
         System.out.println("List of beans provided by Spring Boot:");
         String[] beanNames = ctx.getBeanDefinitionNames();
         Arrays.sort(beanNames);
@@ -20,5 +20,7 @@ public class Application {
             System.out.print(beanName);
             System.out.print(" ");
         }
+*/
     }
+
 }

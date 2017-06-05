@@ -16,7 +16,35 @@ public class RouteCandidateController {
     private RouteCandidateRepository routeCandidateRepository;
 
     @RequestMapping(method = RequestMethod.GET)
-    public List<Route> rc (@RequestParam(value="departureCity") String dep, @RequestParam(value="destinationCity") String dest, @RequestParam(value="steps", defaultValue="3") int steps) {
+    public List<Route> rc (@RequestParam(value="departureCity") String dep,
+                           @RequestParam(value="departureCountry") String depCountry,
+                           @RequestParam(value="isRound") boolean isRound,
+                           @RequestParam(value="steps", defaultValue="3") int steps,
+                           @RequestParam(value="bigCities", defaultValue = "false") boolean onlyBigCities,
+                           @RequestParam(value="smallCities", defaultValue = "false") boolean onlySmallCities,
+                           @RequestParam(value="checkCulture", defaultValue = "false") boolean checkCulture,
+                           @RequestParam(value="checkNight", defaultValue = "false") boolean checkNight,
+                           @RequestParam(value="checkBeach", defaultValue = "false") boolean checkBeach,
+                           @RequestParam(value="checkMountain", defaultValue = "false") boolean checkMountain,
+                           @RequestParam(value="checkTurist", defaultValue = "false") boolean checkTurist,
+                           @RequestParam(value="distance") String distance
+                           ) {
+
+
+        return IteratorUtils.toList(routeCandidateRepository.doQuery(
+                dep,
+                depCountry,
+                isRound,
+                steps,
+                onlyBigCities,
+                onlySmallCities,
+                checkCulture,
+                checkNight,
+                checkBeach,
+                checkMountain,
+                checkTurist,
+                distance
+        ).iterator());
 
         // MATCH (departure:City)<-[]-(dep:Airport)-[r1:flights]->(s1:Airport)-[]->(dest:City) RETURN departure.name, dest.name, r1.distance LIMIT 10;
 
@@ -31,9 +59,6 @@ public class RouteCandidateController {
 //        System.out.println("Results: " + IteratorUtils.toList(routeCandidateRepository.cypherQuery(dep, dest, steps).iterator()).size());
 //        return IteratorUtils.toList(routeCandidateRepository.doQuery(dep).iterator());
 
-        System.out.println("Results: " + IteratorUtils.toList(routeCandidateRepository.doQuery(dep, dest, steps).iterator()).size());
-        return IteratorUtils.toList(routeCandidateRepository.doQuery(dep,dest,steps).iterator());
-
-        //return new RouteCandidateOLD();
-    }
+//        System.out.println("Results: " + IteratorUtils.toList(routeCandidateRepository.doQuery(dep, dest, steps).iterator()).size());
+   }
 }

@@ -4,6 +4,8 @@ import org.neo4j.ogm.annotation.GraphId;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
 
+import java.util.ArrayList;
+
 /**
  * Created by Gerard on 25/05/2017.
  */
@@ -15,6 +17,7 @@ public class Route {
     String name;
     String lon[];
     String lat[];
+    ArrayList<City> steps;
 
 //    @Relationship(type="ACTS_IN", direction = Relationship.INCOMING)
 //    City[] cities;
@@ -50,5 +53,13 @@ public class Route {
 
     public void setLat(String[] lat) {
         this.lat = lat;
+    }
+
+    public ArrayList<City> getSteps() {
+        return steps;
+    }
+
+    public void setSteps(ArrayList<City> steps) {
+        this.steps = steps;
     }
 }

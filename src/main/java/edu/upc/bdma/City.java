@@ -17,7 +17,7 @@ public class City {
     private String name;
     private String country;
 
-    private City() {
+    public City() {
         // Empty constructor required as of Neo4j API 2.0.5
     };
 

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>BDMA 2016 - 2017</title>
+
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="font-awesome/css/font-awesome.css" rel="stylesheet">
+
+    <link href="css/animate.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+
+    <link href="css/plugins/select2/select2.min.css" rel="stylesheet">
+	<link href="css/plugins/chosen/bootstrap-chosen.css" rel="stylesheet">
+
+
+</head>
+
+<body>
+<!-- URL:  www.example.com/correct/?message=done&year=1990 -->
+
+	<script src="js/jquery-3.1.1.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+
+<!-- Select2 -->
+<script src="js/plugins/select2/select2.full.min.js"></script>
+
+
+
+<div id="wrapper">
+
+    <nav class="navbar-default navbar-static-side" role="navigation">
+        <div class="sidebar-collapse">
+            <ul class="nav metismenu" id="side-menu">
+                <li class="nav-header">
+                    <div class="dropdown profile-element">
+                            <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                            <span class="clear"> <span class="block m-t-xs"> <strong class="font-bold"><big><big>BDMA</big></big></strong>
+							</span> <!--span class="text-muted text-xs block">Art Director <b class="caret"></b></span> </span--> </span></a>
+                            <ul class="dropdown-menu animated fadeInRight m-t-xs">
+                                <li><a href="#">Logout</a></li>
+                            </ul>
+                    </div>
+                    <div class="logo-element">
+                        IN+
+                    </div>
+                </li>
+                <li>
+                    <a href="#" id="index"><i class="fa fa-plane"></i> <span class="nav-label">Search routes</span></a>
+                </li>
+                <li class="active">
+                    <a href="#" id="cpanel"><i class="fa fa-lock"></i> <span class="nav-label">Control panel</span> </a>
+                </li>
+            </ul>
+
+        </div>
+    </nav>
+
+    <div id="page-wrapper" class="gray-bg">
+        <div class="row border-bottom">
+            <nav class="navbar navbar-static-top white-bg" role="navigation" style="margin-bottom: 0">
+                <div class="navbar-header">
+                    <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-bars"></i> </a>
+                </div>
+                <ul class="nav navbar-top-links navbar-right">
+					<li>
+						<span class="m-r-sm text-muted welcome-message" id="username"></span>
+					</li>
+					<li>
+                        <a href="start.html">
+                            <i class="fa fa-sign-out"></i> Log out
+                        </a>
+                    </li>
+                </ul>
+
+            </nav>
+        </div>
+        <div class="wrapper wrapper-content animated fadeInRight">
+			<div class="row">
+				<div class="col-lg-3">
+					<div class="widget style1 navy-bg">
+							<div class="row">
+								<div class="col-xs-5 text-center">
+									<i class="fa fa-heart fa-5x"></i>
+								</div>
+								<div class="col-xs-7 text-right">
+									<span>Route Likes</span>
+									<h2 class="font-bold">24</h2>
+								</div>
+							</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+        <div class="footer">
+            <div class="pull-right">
+                Oscar Hortelano - Ricardo Oliveira - Gerard Font
+            </div>
+            <div>
+                <strong>Copyright</strong> BDMA &copy; 2016-2017
+            </div>
+        </div>
+
+    </div>
+</div>
+
+	<!-- Mainly scripts -->
+	<script src="js/jquery-3.1.1.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/plugins/metisMenu/jquery.metisMenu.js"></script>
+	<script src="js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+
+	<!-- Custom and plugin javascript -->
+	<script src="js/inspinia.js"></script>
+	<script src="js/plugins/pace/pace.min.js"></script>
+	<!-- Chosen -->
+	<script src="js/plugins/chosen/chosen.jquery.js"></script>
+
+			
+	<script type="text/javascript">
+        $(document).ready(function(){
+        	var urlParams = new URLSearchParams(window.location.search);
+			$( "#index" ).click(function() {
+				window.location.replace("index.html?name="+urlParams.get('name'));
+			});
+		});
+	</script>
+</body>
+
+</html>

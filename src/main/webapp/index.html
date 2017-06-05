@@ -53,7 +53,7 @@
                     <a href="index.html"><i class="fa fa-plane"></i> <span class="nav-label">Search routes</span></a>
                 </li>
                 <li>
-                    <a href="minor.html"><i class="fa fa-lock"></i> <span class="nav-label">Control panel</span> </a>
+                    <a href="#" id="cpanel"><i class="fa fa-lock"></i> <span class="nav-label">Control panel</span> </a>
                 </li>
             </ul>
 
@@ -80,75 +80,6 @@
             </nav>
         </div>
         <div class="wrapper wrapper-content animated fadeInRight">
-			<div class="row">
-				<div class="col-lg-3">
-					<div class="widget style1 navy-bg">
-							<div class="row">
-								<div class="col-xs-5 text-center">
-									<i class="fa fa-heart fa-5x"></i>
-								</div>
-								<div class="col-xs-7 text-right">
-									<span>Route Likes</span>
-									<h2 class="font-bold">24</h2>
-								</div>
-							</div>
-					</div>
-				</div>
-				<div class="col-lg-3">
-					<div class="widget style1 navy-bg">
-						<div class="row">
-							<div class="col-xs-5">
-								<i class="fa fa-cloud fa-5x"></i>
-							</div>
-							<div class="col-xs-6 text-right">
-								<span> Today degrees </span>
-								<h2 class="font-bold">26'C</h2>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="col-lg-3">
-					<div class="widget style1 navy-bg">
-						<div class="row">
-							<div class="col-xs-5">
-								<i class="fa fa-cloud fa-5x"></i>
-							</div>
-							<div class="col-xs-6 text-right">
-								<span> Today degrees </span>
-								<h2 class="font-bold">26'C</h2>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="col-lg-3">
-					<div class="widget style1 navy-bg">
-						<div class="row">
-							<div class="col-xs-5">
-								<i class="fa fa-cloud fa-5x"></i>
-							</div>
-							<div class="col-xs-6 text-right">
-								<span> Today degrees </span>
-								<h2 class="font-bold">26'C</h2>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>		
-		
-		
-            <!--div class="row">
-                <div class="col-lg-12">
-                    <div class="text-center m-t-lg">
-                        <h1>
-                            Welcome in INSPINIA Static SeedProject
-                        </h1>
-                        <small>
-                            It is an application skeleton for a typical web app. You can use it to quickly bootstrap your webapp projects and dev environment for these projects.
-                        </small>
-                    </div>
-                </div>
-            </div-->
-
 			<div class="row">
 				<div class="col-lg-6">
 					<div class="ibox float-e-margins">
@@ -206,28 +137,28 @@
 
 								<p><b>Interests (max 2)</b></p>
 								<div class="checkbox checkbox-inline">
-									&#160;&#160;&#160;&#160;<input type="checkbox" id="checkCulture" value="option1">Cultural
+									&#160;&#160;&#160;&#160;<input type="checkbox" id="checkCulture" value="clt">Cultural
 								</div>
 								<div class="checkbox checkbox-success checkbox-inline">
-									&#160;&#160;&#160;&#160;<input type="checkbox" id="checkNight" value="option1">Nightlife
+									&#160;&#160;&#160;&#160;<input type="checkbox" id="checkNight" value="nig">Nightlife
 								</div>
 								<div class="checkbox checkbox-success checkbox-inline">
-									&#160;&#160;&#160;&#160;<input type="checkbox" id="checkBeach" value="option1">Beach
+									&#160;&#160;&#160;&#160;<input type="checkbox" id="checkBeach" value="bea">Beach
 								</div>
 								<div class="checkbox checkbox-inline">
-									&#160;&#160;&#160;&#160;<input type="checkbox" id="checkMountain" value="option1">Mountain
+									&#160;&#160;&#160;&#160;<input type="checkbox" id="checkMountain" value="mou">Mountain
 								</div>
 								<div class="checkbox checkbox-success checkbox-inline">
-									&#160;&#160;&#160;&#160;<input type="checkbox" id="checkTurist" value="option1">Tourist city
+									&#160;&#160;&#160;&#160;<input type="checkbox" id="checkTurist" value="tou">Tourist city
 								</div>
 								<br/><br/>
 
 								<p><b>Type of destination</b></p>
 								<div class="checkbox checkbox-inline">
-									&#160;&#160;&#160;&#160;<input type="checkbox" id="checkCulture" value="option1">Only Big cities
+									&#160;&#160;&#160;&#160;<input type="checkbox" id="bigCities" value="true">Only Big cities
 								</div>
 								<div class="checkbox checkbox-inline">
-									&#160;&#160;&#160;&#160;<input type="checkbox" id="checkCulture" value="option1">Only Small cities
+									&#160;&#160;&#160;&#160;<input type="checkbox" id="smallCities" value="true">Only Small cities
 								</div>
 								<br/><br/>
 
@@ -274,11 +205,10 @@
 										Countries: <div id="nCountries1"></div>
 									</div>
 									<div class="m-t text-righ">
-										<a href="#" id="map_b1" class="btn btn-outline btn-info btn-xs"><i class="fa fa-plane"></i>&#160;Map</a>
 										<a href="#" class="btn btn-danger btn-xs"><i class="fa fa-heart"></i>&#160;Like</a>
 										<br/>&#160;
 									</div>
-									<div id="map_d1"></div>
+									<div id="map_d1" style="width:100%; height:250px"></div>
 								</div>
 							</div>
 						</div>
@@ -294,11 +224,10 @@
 										Countries: <div id="nCountries2"></div>
 									</div>
 									<div class="m-t text-righ">
-										<a href="#" id="map_b2" class="btn btn-outline btn-info btn-xs"><i class="fa fa-plane"></i>&#160;Map</a>
 										<a href="#" class="btn btn-danger btn-xs"><i class="fa fa-heart"></i>&#160;Like</a>
 										<br/>&#160;
 									</div>
-									<div id="map_d2"></div>
+									<div id="map_d2" style="width:100%; height:250px"></div>
 								</div>
 							</div>
 						</div>
@@ -314,11 +243,10 @@
 										Countries: <div id="nCountries3"></div>
 									</div>
 									<div class="m-t text-righ">
-										<a href="#" id="map_b3" class="btn btn-outline btn-info btn-xs"><i class="fa fa-plane"></i>&#160;Map</a>
 										<a href="#" class="btn btn-danger btn-xs"><i class="fa fa-heart"></i>&#160;Like</a>
 										<br/>&#160;
 									</div>
-									<div id="map_d3"></div>
+									<div id="map_d3" style="width:100%; height:250px"></div>
 								</div>
 							</div>
 						</div>
@@ -334,11 +262,10 @@
 										Countries: <div id="nCountries4"></div>
 									</div>
 									<div class="m-t text-righ">
-										<a href="#" id="map_b4" class="btn btn-outline btn-info btn-xs"><i class="fa fa-plane"></i>&#160;Map</a>
 										<a href="#" class="btn btn-danger btn-xs"><i class="fa fa-heart"></i>&#160;Like</a>
 										<br/>&#160;
 									</div>
-									<div id="map_d4"></div>
+									<div id="map_d4" style="width:100%; height:250px"></div>
 								</div>
 							</div>
 						</div>
@@ -354,11 +281,10 @@
 										Countries: <div id="nCountries5"></div>
 									</div>
 									<div class="m-t text-righ">
-										<a href="#" id="map_b5" class="btn btn-outline btn-info btn-xs"><i class="fa fa-plane"></i>&#160;Map</a>
 										<a href="#" class="btn btn-danger btn-xs"><i class="fa fa-heart"></i>&#160;Like</a>
 										<br/>&#160;
 									</div>
-									<div id="map_d5"></div>
+									<div id="map_d5" style="width:100%; height:250px"></div>
 								</div>
 							</div>
 						</div>
@@ -374,11 +300,10 @@
 										Countries: <div id="nCountries6"></div>
 									</div>
 									<div class="m-t text-righ">
-										<a href="#" id="map_b6" class="btn btn-outline btn-info btn-xs"><i class="fa fa-plane"></i>&#160;Map</a>
 										<a href="#" class="btn btn-danger btn-xs"><i class="fa fa-heart"></i>&#160;Like</a>
 										<br/>&#160;
 									</div>
-									<div id="map_d6"></div>
+									<div id="map_d6" style="width:100%; height:250px"></div>
 								</div>
 							</div>
 						</div>
@@ -449,7 +374,9 @@
 			$('.chosen-select').chosen({width: "50%"});
 			$("#steps").chosen({disable_search_threshold: 10});
 
-
+			$( "#cpanel" ).click(function() {
+				window.location.replace("cpanel.html?name="+urlParams.get('name'));
+			});
 
 			// USPERT User -----------------------------------------------------------------------------
 			$.ajax({
@@ -470,7 +397,7 @@
 			// Inital city search -----------------------------------------------------------------------------
 			$.get("/cities", function(data){
 				$.each(data, function(i, item) {
-					var o = new Option(data[i].name, data[i].name);
+					var o = new Option(data[i].name+"#"+data[i].country, data[i].name+"#"+data[i].country);
 					$(o).html(data[i].name + " (" +data[i].country+ ")");
 					$("#city").append(o);
 				});
@@ -480,42 +407,23 @@
 			// maps
 			var map = [];
 
-//			$( "#map_b1" ).click(function() {
-				$("#map_d1").css('width', '100%');
-				$("#map_d1").css('height', '250px');
-//			});
-//			$( "#map_b2" ).click(function() {
-				$("#map_d2").css('width', '100%');
-				$("#map_d2").css('height', '250px');
-//			});
-//			$( "#map_b3" ).click(function() {
-				$("#map_d3").css('width', '100%');
-				$("#map_d3").css('height', '250px');
-//			});
-//			$( "#map_b4" ).click(function() {
-				$("#map_d4").css('width', '100%');
-				$("#map_d4").css('height', '250px');
-//			});
-//			$( "#map_b5" ).click(function() {
-				$("#map_d5").css('width', '100%');
-				$("#map_d5").css('height', '250px');
-//			});
-//			$( "#map_b6" ).click(function() {
-				$("#map_d6").css('width', '100%');
-				$("#map_d6").css('height', '250px');
-//			});
-
-
 
 			// Perform SEARCH -----------------------------------------------------------------------------
 			$( "#searchForm" ).submit(function( event ) {
 				var query = "/routecandidates?";
-				query += "departureCity=" + $("#city").val();
+				query += "departureCity=" + $("#city").val().substr(0,$("#city").val().indexOf("#"));
+				query += "&departureCountry=" + $("#city").val().substr($("#city").val().indexOf("#")+1);
 				query += "&steps=" + $("#steps").val();
 
-				if($("#round").prop("checked")){
-					query += "&destinationCity=" + $("#city").val();
-				}
+				query += "&isRound=" + $("#round").prop("checked");
+
+				query += "&checkCulture=" + $("#checkCulture").prop("checked");
+				query += "&checkNight=" + $("#checkNight").prop("checked");
+				query += "&checkBeach=" + $("#checkBeach").prop("checked");
+				query += "&checkMountain=" + $("#checkMountain").prop("checked");
+				query += "&checkTurist=" + $("#checkTurist").prop("checked");
+
+				query += "&distance=" + $("#distance").val();
 
 				$("#route1").hide();
 				$("#route2").hide();
@@ -538,16 +446,7 @@
 						var flightPlanCoordinates = [];
 						for (var j=0; j<item.lat.length; j++){
 							flightPlanCoordinates.push( new google.maps.LatLng(parseFloat(item.lat[j]), parseFloat(item.lon[j])) );
-//							flightPlanCoordinates.push({lat:parseFloat(item.lat[j]), lng: parseFloat(item.lon[j])});
-//							flightPlanCoordinates.push("{lat:"+item.lat[j]+", lng: "+item.lon[j]+"}");
 						}
-/*						var flightPlanCoordinates = [
-						  {lat: 37.772, lng: -122.214},
-						  {lat: 21.291, lng: -157.821},
-						  {lat: -18.142, lng: 178.431},
-						  {lat: -27.467, lng: 153.027}
-						];
-*/
 						var flightPath = new google.maps.Polyline({
 						  path: flightPlanCoordinates,
 						  geodesic: true,
@@ -564,21 +463,6 @@
 							styles: [{"featureType":"water","stylers":[{"saturation":43},{"lightness":-11},{"hue":"#0088ff"}]},{"featureType":"road","elementType":"geometry.fill","stylers":[{"hue":"#ff0000"},{"saturation":-100},{"lightness":99}]},{"featureType":"road","elementType":"geometry.stroke","stylers":[{"color":"#808080"},{"lightness":54}]},{"featureType":"landscape.man_made","elementType":"geometry.fill","stylers":[{"color":"#ece2d9"}]},{"featureType":"poi.park","elementType":"geometry.fill","stylers":[{"color":"#ccdca1"}]},{"featureType":"road","elementType":"labels.text.fill","stylers":[{"color":"#767676"}]},{"featureType":"road","elementType":"labels.text.stroke","stylers":[{"color":"#ffffff"}]},{"featureType":"poi","stylers":[{"visibility":"off"}]},{"featureType":"landscape.natural","elementType":"geometry.fill","stylers":[{"visibility":"on"},{"color":"#b8cb93"}]},{"featureType":"poi.park","stylers":[{"visibility":"on"}]},{"featureType":"poi.sports_complex","stylers":[{"visibility":"on"}]},{"featureType":"poi.medical","stylers":[{"visibility":"on"}]},{"featureType":"poi.business","stylers":[{"visibility":"simplified"}]}]
 						};
 						map[i] = new google.maps.Map(document.getElementById("map_d"+(i+1)), mapOptions);
-
-/*
-			map = new google.maps.Map(document.getElementById("map_d1"), mapOptions1);
-			map.push(map1);
-			map2 = new google.maps.Map(document.getElementById("map_d2"), mapOptions1);
-			map.push(map2);
-			map3 = new google.maps.Map(document.getElementById("map_d3"), mapOptions1);
-			map.push(map3);
-			map4 = new google.maps.Map(document.getElementById("map_d4"), mapOptions1);
-			map.push(map4);
-			map5 = new google.maps.Map(document.getElementById("map_d5"), mapOptions1);
-			map.push(map5);
-			map6 = new google.maps.Map(document.getElementById("map_d6"), mapOptions1);
-			map.push(map6);
-*/
 
 						flightPath.setMap(map[i]);
 						map[i].fitBounds(zoomToObject(flightPath));
