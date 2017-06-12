@@ -9,4 +9,14 @@ public interface RouteRepository extends GraphRepository<Route> {
 
     @Query ("MATCH ()-[n:flights]->() RETURN count(n)")
     Long countFlights ();
+
+    @Query ("MATCH ()-[n:likes]->() RETURN count(n)")
+    Long countRoutesLikes ();
+
+    @Query ("MATCH (u)-[n:likes]->() WHERE u.name = {0} RETURN count(n)")
+    Long countUserLikes (String userName);
+
+    @Query ("MATCH (n:Route) RETURN count(n)")
+    Long countStored ();
+
 }

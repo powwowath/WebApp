@@ -202,10 +202,11 @@
 									<a href="#" class="product-name" id="routeName1"></a>
 
 									<div class="small m-t-xs">
-										Countries: <div id="nCountries1"></div>
+										<b>Steps:</b> <span id="nSteps1"></span><br/>
+										<b>Distance:</b> <span id="nDistance1"></span> km
 									</div>
 									<div class="m-t text-righ">
-										<a href="#" class="btn btn-danger btn-xs likeBtn" id="like1"><i class="fa fa-heart"></i>&#160;Like</a>
+										<a class="btn btn-danger btn-xs likeBtn" id="like1"><i class="fa fa-heart"></i>&#160;Like</a>
 										<br/>&#160;
 									</div>
 									<div id="map_d1" style="width:100%; height:250px"></div>
@@ -221,10 +222,11 @@
 									<a href="#" class="product-name" id="routeName2"></a>
 
 									<div class="small m-t-xs">
-										Countries: <div id="nCountries2"></div>
+										<b>Steps:</b> <span id="nSteps2"></span><br/>
+										<b>Distance:</b> <span id="nDistance2"></span> km
 									</div>
 									<div class="m-t text-righ">
-										<a href="#" class="btn btn-danger btn-xs"><i class="fa fa-heart"></i>&#160;Like</a>					<br/>&#160;
+										<a class="btn btn-danger btn-xs likeBtn" id="like2"><i class="fa fa-heart"></i>&#160;Like</a>					<br/>&#160;
 									</div>
 									<div id="map_d2" style="width:100%; height:250px"></div>
 								</div>
@@ -239,10 +241,11 @@
 									<a href="#" class="product-name" id="routeName3"></a>
 
 									<div class="small m-t-xs">
-										Countries: <div id="nCountries3"></div>
+										<b>Steps:</b> <span id="nSteps3"></span><br/>
+										<b>Distance:</b> <span id="nDistance3"></span> km
 									</div>
 									<div class="m-t text-righ">
-										<a href="#" class="btn btn-danger btn-xs"><i class="fa fa-heart"></i>&#160;Like</a>
+										<a class="btn btn-danger btn-xs likeBtn" id="like3"><i class="fa fa-heart"></i>&#160;Like</a>
 										<br/>&#160;
 									</div>
 									<div id="map_d3" style="width:100%; height:250px"></div>
@@ -258,10 +261,11 @@
 									<a href="#" class="product-name" id="routeName4"></a>
 
 									<div class="small m-t-xs">
-										Countries: <div id="nCountries4"></div>
+										<b>Steps:</b> <span id="nSteps4"></span><br/>
+										<b>Distance:</b> <span id="nDistance4"></span> km
 									</div>
 									<div class="m-t text-righ">
-										<a href="#" class="btn btn-danger btn-xs"><i class="fa fa-heart"></i>&#160;Like</a>
+										<a class="btn btn-danger btn-xs likeBtn" id="like4"><i class="fa fa-heart"></i>&#160;Like</a>
 										<br/>&#160;
 									</div>
 									<div id="map_d4" style="width:100%; height:250px"></div>
@@ -277,10 +281,11 @@
 									<a href="#" class="product-name" id="routeName5"></a>
 
 									<div class="small m-t-xs">
-										Countries: <div id="nCountries5"></div>
+										<b>Steps:</b> <span id="nSteps5"></span><br/>
+										<b>Distance:</b> <span id="nDistance5"></span> km
 									</div>
 									<div class="m-t text-righ">
-										<a href="#" class="btn btn-danger btn-xs"><i class="fa fa-heart"></i>&#160;Like</a>
+										<a class="btn btn-danger btn-xs likeBtn" id="like5"><i class="fa fa-heart"></i>&#160;Like</a>
 										<br/>&#160;
 									</div>
 									<div id="map_d5" style="width:100%; height:250px"></div>
@@ -296,10 +301,11 @@
 									<a href="#" class="product-name" id="routeName6"></a>
 
 									<div class="small m-t-xs">
-										Countries: <div id="nCountries6"></div>
+										<b>Steps:</b> <span id="nSteps6"></span><br/>
+										<b>Distance:</b> <span id="nDistance6"></span> km
 									</div>
 									<div class="m-t text-righ">
-										<a href="#" class="btn btn-danger btn-xs"><i class="fa fa-heart"></i>&#160;Like</a>
+										<a class="btn btn-danger btn-xs likeBtn" id="like6"><i class="fa fa-heart"></i>&#160;Like</a>
 										<br/>&#160;
 									</div>
 									<div id="map_d6" style="width:100%; height:250px"></div>
@@ -349,6 +355,8 @@
 
 			
 	<script type="text/javascript">
+		var routes;
+
 		function zoomToObject(obj){
 			var bounds = new google.maps.LatLngBounds();
 			var points = obj.getPath().getArray();
@@ -369,6 +377,10 @@
 
         	var urlParams = new URLSearchParams(window.location.search);
         	$("#username").html(urlParams.get('name'));
+
+			if (urlParams.get('name') === null){
+				window.location.href = "./start.html";
+			}
 
 			$('.chosen-select').chosen({width: "50%"});
 			$("#steps").chosen({disable_search_threshold: 10});
@@ -438,8 +450,11 @@
 				$("#routeName6").html("");
 
 				$.get(query, function(data){
+					routes = data;
 					$.each(data, function(i, item) {
 						$("#routeName"+(i+1)).html(data[i].name);
+						$("#nSteps"+(i+1)).html(data[i].nStopOver);
+						$("#nDistance"+(i+1)).html(Math.round(data[i].distance));
 						$("#route"+(i+1)).show();
 
 						var flightPlanCoordinates = [];
@@ -473,7 +488,30 @@
 			});
 
 			$( ".likeBtn" ).click(function() {
-/*
+				var routeNum = $(this)[0].id.substring(4,5);
+				delete routes[routeNum-1]["id"];
+				delete routes[routeNum-1]["steps"];
+				delete routes[routeNum-1]["lon"];
+				delete routes[routeNum-1]["lat"];
+				delete routes[routeNum-1]["users"];
+
+				// Hide like button
+				$(this).hide();
+				var routeString = JSON.stringify(routes[routeNum-1]);
+				var object = {
+					userName : $("#username").html(),
+					route : {
+						name : routes[routeNum-1].name,
+						distance : routes[routeNum-1].distance,
+						departure : routes[routeNum-1].departure,
+						departureCountry : routes[routeNum-1].departureCountry,
+						indBeach : routes[routeNum-1].indBeach,
+						indNightlife : routes[routeNum-1].indNightlife,
+						indCulture : routes[routeNum-1].indCulture,
+						indMountain : routes[routeNum-1].indMountain,
+						indTourist : routes[routeNum-1].indTourist
+					}
+				}
 				$.ajax({
 					headers: {
 						'Accept': 'application/json',
@@ -483,15 +521,10 @@
 					type: 'post',
 					dataType: 'json',
 					success: function (data) {
-						// Hide like button
-						$(this).hide();
 					},
-					data: {
-						name: "",
-						steps
-					}
+					data: JSON.stringify(object)
 				});
-*/
+
 			});
 
 		});

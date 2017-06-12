@@ -6,6 +6,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.neo4j.ogm.annotation.GraphId;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
@@ -29,7 +30,8 @@ public class User {
      * to ignore the direction of the relationship.
      * https://dzone.com/articles/modelling-data-neo4j
      */
-    @Relationship(type = "likes", direction = Relationship.UNDIRECTED)
+//    @JsonManagedReference
+    @Relationship(type = "likes", direction = Relationship.OUTGOING)
     public Set<Route> routes;
 
     public void likes(Route route) {

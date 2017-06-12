@@ -139,6 +139,34 @@
                     </div>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="widget style1 yellow-bg">
+                        <div class="row">
+                            <div class="col-xs-5 text-center">
+                                <i class="fa fa-heart fa-5x"></i>
+                            </div>
+                            <div class="col-xs-7 text-right">
+                                <span>Route likes</span>
+                                <h2 class="font-bold" id="nLikes"></h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="widget style1 yellow-bg">
+                        <div class="row">
+                            <div class="col-xs-5 text-center">
+                                <i class="fa fa-plane fa-5x"></i>
+                            </div>
+                            <div class="col-xs-7 text-right">
+                                <span>Stored routes</span>
+                                <h2 class="font-bold" id="nStoredRoutes"></h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <div class="row">
                 <div class="col-lg-12">
@@ -154,7 +182,7 @@
                             </div>
                             <div class="col-xs-7 text-right">
                                 <span>Route Likes</span>
-                                <h2 class="font-bold">24</h2>
+                                <h2 class="font-bold" id="nUserLikes"></h2>
                             </div>
                         </div>
                     </div>
@@ -207,6 +235,16 @@
 			$.get("/users/count", function(data){
 				$('#nUsers').html(data);
 			});
+			$.get("/routes/countLikes", function(data){
+				$('#nLikes').html(data);
+			});
+			$.get("/routes/countStored", function(data){
+				$('#nStoredRoutes').html(data);
+			});
+			$.get("/routes/routeUserLikes?userName="+urlParams.get('name'), function(data){
+				$('#nUserLikes').html(data);
+			});
+
 		});
 	</script>
 </body>

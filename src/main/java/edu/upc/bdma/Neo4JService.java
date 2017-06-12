@@ -1,5 +1,6 @@
 package edu.upc.bdma;
 
+import javafx.beans.binding.IntegerBinding;
 import org.apache.commons.io.FileUtils;
 import org.neo4j.driver.v1.*;
 
@@ -43,11 +44,11 @@ public class Neo4JService {
             if (checkNight) numChecks++;
             if (checkTurist) numChecks++;
 
-            String query = "MATCH (c1:City)-[]-(a1:Airport)-[r1]-";
+            String query = "MATCH (c1:City)-[]-(a1:Airport)-[r1]->";
 
             // Intermediate steps
             for(int i = 1; i <= steps; i++) {
-                query += "(a"+(i+1)+":Airport)-[r"+(i+1)+"]-";
+                query += "(a"+(i+1)+":Airport)-[r"+(i+1)+"]->";
                 if (i == steps){
                     query += "(a"+(i+2)+":Airport)";
                 }
@@ -63,6 +64,7 @@ public class Neo4JService {
                 if (checkTurist) wherePcts += " AND c"+(i+1)+".pctTourist > " + (50/numChecks);
 
                 whereDistance += " + r"+(i+1)+".distance";
+
                 if (i == steps){
                     query += " WHERE ";
                     if (isRound) {
@@ -88,9 +90,9 @@ public class Neo4JService {
             }
             query += " AND c1.name = \""+departure+"\" AND c1.country = \""+departureCountry+"\"";
 
-            query += " RETURN DISTINCT c1, a1";
+            query += " RETURN DISTINCT c1, a1, r1";
             for(int i = 1; i <= steps; i++) {
-                query += ", c"+(i+1)+", a"+(i+1)+" ";
+                query += ", c"+(i+1)+", a"+(i+1)+", r"+(i+1)+" ";
             }
 
             query += " LIMIT " + MAX_RESULTS;
@@ -102,10 +104,15 @@ public class Neo4JService {
             StatementResult res = session.run(query);
             List<Record> rl = res.list();
 
+
             for(int i = 0; i < rl.size(); i++){
                 Route r = new Route();
-                ArrayList<City> rSteps = new ArrayList<City>();
-                City step = new City();
+                double rDistance = 0;
+                int pctTourist = 0;
+                int pctNightlife = 0;
+                int pctCulture = 0;
+                int pctBeach = 0;
+                int pctMountain = 0;
 
                 int extraPoints = 2;
                 if(!isRound){
@@ -118,35 +125,41 @@ public class Neo4JService {
                 String routeName = rl.get(i).get(0).get("name").asString() + " (" +rl.get(i).get(0).get("country").asString()+ ")";
                 lon[0] = ""+rl.get(i).get(1).get("lon");
                 lat[0] = ""+rl.get(i).get(1).get("lat");
-                step.setName(rl.get(i).get(0).get("name").asString());
-                step.setCountry(rl.get(i).get(0).get("country").asString());
-                rSteps.add(step);
+                lon[0] = ""+rl.get(i).get(1).get("lon");
+                lat[0] = ""+rl.get(i).get(1).get("lat");
+                rDistance = rl.get(i).get(2).get("distance").asDouble();
 
                 for (int j = 1; j <= steps; j++){
-                    routeName += " - " + rl.get(i).get((j*2)).get("name").asString() + " (" +rl.get(i).get((j*2)).get("country").asString()+ ")";
-                    lon[j] = "" + rl.get(i).get((j*2)+1).get("lon");
-                    lat[j] = "" + rl.get(i).get((j*2)+1).get("lat");
-
-                    step = new City();
-                    step.setName(rl.get(i).get(j*2).get("name").asString());
-                    step.setCountry(rl.get(i).get(j*2).get("country").asString());
-                    rSteps.add(step);
+                    routeName += " - " + rl.get(i).get((j*3)).get("name").asString() + " (" +rl.get(i).get((j*3)).get("country").asString()+ ")";
+                    lon[j] = "" + rl.get(i).get((j*3)+1).get("lon");
+                    lat[j] = "" + rl.get(i).get((j*3)+1).get("lat");
+                    rDistance += rl.get(i).get((j*3)+2).get("distance").asDouble();
+                    pctBeach += rl.get(i).get((j*3)).get("pctBeach").asInt();
+                    pctMountain += rl.get(i).get((j*3)).get("pctMountain").asInt();
+                    pctTourist += rl.get(i).get((j*3)).get("pctTourist").asInt();
+                    pctNightlife += rl.get(i).get((j*3)).get("pctNightlife").asInt();
+                    pctCulture += rl.get(i).get((j*3)).get("pctCultural").asInt();
                 }
 
                 if (isRound) {
                     routeName += " - " + rl.get(i).get(0).get("name").asString() + " (" + rl.get(i).get(0).get("country").asString() + ")";
                     lon[steps + 1] = ""+rl.get(i).get(1).get("lon");
                     lat[steps + 1] = ""+rl.get(i).get(1).get("lat");
-
-                    step.setName(rl.get(i).get(0).get("name").asString());
-                    step.setCountry(rl.get(i).get(0).get("country").asString());
-                    rSteps.add(step);
                 }
                 r.setName(routeName);
-                r.setSteps(rSteps);
-
+                r.setDeparture(rl.get(i).get(0).get("name").asString());
+                r.setDepartureCountry(rl.get(i).get(0).get("country").asString());
+                r.setRound(isRound);
                 r.setLon(lon);
                 r.setLat(lat);
+                r.setnStopOver(steps);
+                r.setDistance(rDistance);
+                r.setIndBeach(pctBeach / steps);
+                r.setIndMountain(pctMountain / steps);
+                r.setIndCulture(pctCulture / steps);
+                r.setIndTourist(pctTourist / steps);
+                r.setIndNightlife(pctNightlife / steps);
+
                 routes.add(r);
             }
 
@@ -170,7 +183,7 @@ public class Neo4JService {
 
 
 
-
+/*
 
 
 
@@ -193,14 +206,7 @@ public class Neo4JService {
 
         try ( Session session = driver.session() )
         {
-/*
-                MATCH (c1:City)-[]-(a1:Airport)-[]-(a2:Airport)-[]-(a3:Airport)-[]-(a4:Airport)
-                MATCH (a2:Airport)-[]-(c2:City)
-                MATCH (a3:Airport)-[]-(c3:City)
-                WHERE (a4:Airport)-[]-(c1:City)
-                AND c1.name ="Barcelona" return c1.name, c1.country, c2,c3 limit 10;
 
-*/
             int numChecks = 0;
             if (checkBeach) numChecks++;
             if (checkCulture) numChecks++;
@@ -322,6 +328,6 @@ public class Neo4JService {
         return routes;
     }
 
-
+*/
 
 }
