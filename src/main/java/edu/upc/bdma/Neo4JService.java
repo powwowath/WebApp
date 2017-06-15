@@ -16,10 +16,13 @@ public class Neo4JService {
     private static final String USERNAME = "neo4j"; // Modify
     private static final String PASSWORD = "neo";
     private static final int MAX_RESULTS = 6;
+    private static final int RELATIONSHIP_BIG_CITY = 150;
+    private static final int RELATIONSHIP_SMALL_CITY = 75;
 
     Driver driver = GraphDatabase.driver( "bolt://localhost:7687", AuthTokens.basic( USERNAME, PASSWORD ) );
 
-    public List<Route> getRoutesN(
+
+    public List<Route> getRoutes(
             String departure,
             String departureCountry,
             boolean isRound,
@@ -32,6 +35,34 @@ public class Neo4JService {
             boolean checkMountain,
             boolean checkTurist,
             String distance
+    ) {
+        List<Route> routes = getRoutesLike(departure, departureCountry, isRound, steps, isBigCities, isSmallCities, checkCulture, checkNight, checkBeach, checkMountain, checkTurist, distance);
+        List<Route> routesNew = getRoutesN(departure, departureCountry, isRound, steps, isBigCities, isSmallCities, checkCulture, checkNight, checkBeach, checkMountain, checkTurist, distance, MAX_RESULTS - routes.size());
+
+        for (int i = 0; i < routesNew.size(); i++){
+            routes.add(routesNew.get(i));
+        }
+
+        driver.close();
+
+        return routes;
+    }
+
+    // New Routes
+    private List<Route> getRoutesN(
+            String departure,
+            String departureCountry,
+            boolean isRound,
+            int steps,
+            boolean isBigCities,
+            boolean isSmallCities,
+            boolean checkCulture,
+            boolean checkNight,
+            boolean checkBeach,
+            boolean checkMountain,
+            boolean checkTurist,
+            String distance,
+            int limit
     ){
         List<Route> routes = new ArrayList<>();
 
@@ -55,15 +86,22 @@ public class Neo4JService {
             }
             String whereDistance = " AND (r1.distance";
             String wherePcts = "";
+            String whereBigSmallCities = "";
             for(int i = 1; i <= steps; i++) {
                 query += " MATCH (a"+(i+1)+":Airport)-[]-(c"+(i+1)+":City)";
-                if (checkBeach) wherePcts += " AND c"+(i+1)+".pctBeach > " + (50/numChecks);
-                if (checkCulture) wherePcts += " AND c"+(i+1)+".pctCultural > " + (50/numChecks);
-                if (checkMountain) wherePcts += " AND c"+(i+1)+".pctMountain > " + (40/numChecks);
-                if (checkNight) wherePcts += " AND c"+(i+1)+".pctNightlife > " + (50/numChecks);
-                if (checkTurist) wherePcts += " AND c"+(i+1)+".pctTourist > " + (50/numChecks);
+                if (checkBeach) wherePcts += " AND c"+(i+1)+".pctBeach > " + (40/numChecks);
+                if (checkCulture) wherePcts += " AND c"+(i+1)+".pctCultural > " + (40/numChecks);
+                if (checkMountain) wherePcts += " AND c"+(i+1)+".pctMountain > " + (30/numChecks);
+                if (checkNight) wherePcts += " AND c"+(i+1)+".pctNightlife > " + (40/numChecks);
+                if (checkTurist) wherePcts += " AND c"+(i+1)+".pctTourist > " + (40/numChecks);
 
                 whereDistance += " + r"+(i+1)+".distance";
+                if (isBigCities) {
+                    whereBigSmallCities += " AND size((a"+(i+1)+":Airport)-[:flights]-(:Airport)) > " + RELATIONSHIP_BIG_CITY;
+                }
+                if (isSmallCities){
+                    whereBigSmallCities += " AND size((a"+(i+1)+":Airport)-[:flights]-(:Airport)) < " + RELATIONSHIP_SMALL_CITY;
+                }
 
                 if (i == steps){
                     query += " WHERE ";
@@ -86,6 +124,8 @@ public class Neo4JService {
                     }
 
                     query += wherePcts;
+
+                    query += whereBigSmallCities;
                 }
             }
             query += " AND c1.name = \""+departure+"\" AND c1.country = \""+departureCountry+"\"";
@@ -95,7 +135,7 @@ public class Neo4JService {
                 query += ", c"+(i+1)+", a"+(i+1)+", r"+(i+1)+" ";
             }
 
-            query += " LIMIT " + MAX_RESULTS;
+            query += " LIMIT " + limit;
 
             System.out.println("");
             System.out.println("Query: "+query);
@@ -159,36 +199,21 @@ public class Neo4JService {
                 r.setIndCulture(pctCulture / steps);
                 r.setIndTourist(pctTourist / steps);
                 r.setIndNightlife(pctNightlife / steps);
+                r.setBigCities(isBigCities);
+                r.setSmallCities(isSmallCities);
 
                 routes.add(r);
             }
 
         }
-        driver.close();
 
         return routes;
     }
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-
-
-
-
-    public List<Route> getRoutes(
+    // Stored Routes (LIKE's)
+    private List<Route> getRoutesLike(
             String departure,
             String departureCountry,
             boolean isRound,
@@ -206,128 +231,62 @@ public class Neo4JService {
 
         try ( Session session = driver.session() )
         {
-
-            int numChecks = 0;
-            if (checkBeach) numChecks++;
-            if (checkCulture) numChecks++;
-            if (checkMountain) numChecks++;
-            if (checkNight) numChecks++;
-            if (checkTurist) numChecks++;
-
-            String query = "MATCH (c1:City)-[]-(a1:Airport)-[r1]-";
-
-            // Intermediate steps
-            for(int i = 1; i <= steps; i++) {
-                query += "(a"+(i+1)+":Airport)-[r"+(i+1)+"]-";
-                if (i == steps){
-                    query += "(a"+(i+2)+":Airport)";
-                }
-            }
-            String whereDistance = " AND (r1.distance";
-            String wherePcts = "";
-            for(int i = 1; i <= steps; i++) {
-                query += " MATCH (a"+(i+1)+":Airport)-[]-(c"+(i+1)+":City)";
-                if (checkBeach) wherePcts += " AND c"+(i+1)+".pctBeach > " + (50/numChecks);
-                if (checkCulture) wherePcts += " AND c"+(i+1)+".pctCultural > " + (50/numChecks);
-                if (checkMountain) wherePcts += " AND c"+(i+1)+".pctMountain > " + (40/numChecks);
-                if (checkNight) wherePcts += " AND c"+(i+1)+".pctNightlife > " + (50/numChecks);
-                if (checkTurist) wherePcts += " AND c"+(i+1)+".pctTourist > " + (50/numChecks);
-
-                whereDistance += " + r"+(i+1)+".distance";
-                if (i == steps){
-                    query += " WHERE ";
-                    if (isRound) {
-                        query += "(a" + (i + 2) + ":Airport)-[]-(c1:City) ";
-                    } else {
-                        query += " c1 = c1 ";
-                    }
-
-                    query += whereDistance;
-                    switch (distance){
-                        case "S": query += ") < 2000";
-                            break;
-                        case "M": query += ") >= 2000 " + whereDistance + ") < 5000";
-                            break;
-                        case "L": query += ") >= 5000 " + whereDistance + ") < 15000";
-                            break;
-                        case "W": query += ") > 15000";
-                            break;
-                    }
-
-                    query += wherePcts;
-                }
-            }
-            query += " AND c1.name = \""+departure+"\" AND c1.country = \""+departureCountry+"\"";
-
-            query += " RETURN DISTINCT c1.name, c1.country, toString(a1.lon), toString(a1.lat)";
-            for(int i = 1; i <= steps; i++) {
-                query += ", c"+(i+1)+".name, c"+(i+1)+".country, toString(a"+(i+1)+".lon), toString(a"+(i+1)+".lat) ";
+            String query = "MATCH (r:Route) ";
+            query += "WHERE r.departure = \"" + departure + "\" ";
+            query += "AND r.departureCountry = \"" + departureCountry + "\" ";
+            query += "AND r.nStopOver = " + steps + " ";
+            query += "AND r.isRound = " + isRound + " ";
+            query += "AND r.isBigCities = " + isBigCities + " ";
+            query += "AND r.isSmallCities = " + isSmallCities + " ";
+            switch (distance){
+                case "S": query += "AND r.distance < 2000 ";
+                    break;
+                case "M": query += "AND r.distance >= 2000 AND r.distance < 5000 ";
+                    break;
+                case "L": query += "AND r.distance >= 5000 AND r.distance < 15000 ";
+                    break;
+                case "W": query += "AND r.distance > 15000 ";
+                    break;
             }
 
-            query += " LIMIT " + MAX_RESULTS;
+            // TODO: Categories
+
+            query += "RETURN r LIMIT 2";
+
 
             System.out.println("");
-            System.out.println("Query: "+query);
+            System.out.println("Query LIKES: "+query);
             System.out.println("");
 
             StatementResult res = session.run(query);
             List<Record> rl = res.list();
 
+
             for(int i = 0; i < rl.size(); i++){
                 Route r = new Route();
-                ArrayList<City> rSteps = new ArrayList<City>();
-                City step = new City();
 
-                int extraPoints = 2;
-                if(!isRound){
-                    extraPoints--;
-                }
-                String lon[] = new String[steps+extraPoints];
-                String lat[] = new String[steps+extraPoints];
+                r.setName(rl.get(i).get(0).get("name").asString());
+                r.setDeparture(rl.get(i).get(0).get("departure").asString());
+                r.setDepartureCountry(rl.get(i).get(0).get("departureCountry").asString());
+                r.setRound(rl.get(i).get(0).get("isRound").asBoolean());
+                r.setnStopOver(rl.get(i).get(0).get("nStopOver").asInt());
+                r.setDistance(rl.get(i).get(0).get("distance").asDouble());
+                r.setIndBeach(rl.get(i).get(0).get("indBeach").asInt());
+                r.setIndMountain(rl.get(i).get(0).get("indMountain").asInt());
+                r.setIndCulture(rl.get(i).get(0).get("indCulture").asInt());
+                r.setIndTourist(rl.get(i).get(0).get("indTourist").asInt());
+                r.setIndNightlife(rl.get(i).get(0).get("indNightlife").asInt());
 
-                // Departrue
-                String routeName = rl.get(i).get(0).asString() + " (" +rl.get(i).get(1).asString()+ ")";
-                lon[0] = rl.get(i).get(2).asString();
-                lat[0] = rl.get(i).get(3).asString();
-                step.setName(rl.get(i).get(0).asString());
-                step.setCountry(rl.get(i).get(1).asString());
-                rSteps.add(step);
+// TODO: Guardar coords
+                r.setLat(rl.get(i).get(0).get("lat").asList().toArray(new String[rl.get(i).get(0).get("lat").asList().size()]));
+                r.setLon(rl.get(i).get(0).get("lon").asList().toArray(new String[rl.get(i).get(0).get("lon").asList().size()]));
 
-                int numReturnedValues = 4;
-                for (int j = 1; j <= steps; j++){
-                    routeName += " - " + rl.get(i).get(j*numReturnedValues).asString() + " (" +rl.get(i).get(j*numReturnedValues+1).asString()+ ")";
-                    lon[j] = rl.get(i).get(j*numReturnedValues+2).asString();
-                    lat[j] = rl.get(i).get(j*numReturnedValues+3).asString();
-
-                    step = new City();
-                    step.setName(rl.get(i).get(j*numReturnedValues).asString());
-                    step.setCountry(rl.get(i).get(j*numReturnedValues+1).asString());
-                    rSteps.add(step);
-                }
-
-                if (isRound) {
-                    routeName += " - " + rl.get(i).get(0).asString() + " (" + rl.get(i).get(1).asString() + ")";
-                    lon[steps + 1] = rl.get(i).get(2).asString();
-                    lat[steps + 1] = rl.get(i).get(3).asString();
-
-                    step.setName(rl.get(i).get(0).asString());
-                    step.setCountry(rl.get(i).get(1).asString());
-                    rSteps.add(step);
-                }
-                r.setName(routeName);
-                r.setSteps(rSteps);
-
-                r.setLon(lon);
-                r.setLat(lat);
                 routes.add(r);
             }
 
         }
-        driver.close();
 
         return routes;
     }
-
-*/
 
 }

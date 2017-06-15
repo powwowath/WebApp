@@ -26,7 +26,7 @@ class RouteCandidateRepositoryImpl implements RouteCandidateRepositoryCustom {
             ) {
         Neo4JService service = new Neo4JService();
 
-        return service.getRoutesN(
+        return service.getRoutes(
                 dep,
                 depCountry,
                 isRound,

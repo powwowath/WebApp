@@ -23,9 +23,9 @@ public class Route {
     private boolean isRound;
     private int nStopOver;
     private double distance;
-    @Transient
+//    @Transient
     private String lon[];
-    @Transient
+//    @Transient
     private String lat[];
 
     private int indTourist;
@@ -34,7 +34,9 @@ public class Route {
     private int indBeach;
     private int indMountain;
 
-//    @JsonBackReference
+    private boolean isBigCities;
+    private boolean isSmallCities;
+
     @JsonIgnore
     @Relationship(type="likes", direction = Relationship.INCOMING)
     private ArrayList<User> users;
@@ -159,5 +161,21 @@ public class Route {
 
     public void setDepartureCountry(String departureCountry) {
         this.departureCountry = departureCountry;
+    }
+
+    public boolean isBigCities() {
+        return isBigCities;
+    }
+
+    public void setBigCities(boolean bigCities) {
+        isBigCities = bigCities;
+    }
+
+    public boolean isSmallCities() {
+        return isSmallCities;
+    }
+
+    public void setSmallCities(boolean smallCities) {
+        isSmallCities = smallCities;
     }
 }

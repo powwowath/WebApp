@@ -389,6 +389,17 @@
 				window.location.replace("cpanel.html?name="+urlParams.get('name'));
 			});
 
+			$( "#bigCities" ).click(function() {
+				if( $("#bigCities").prop("checked") ) {
+					$("#smallCities").prop('checked', false);
+				}
+			});
+			$( "#smallCities" ).click(function() {
+				if( $("#smallCities").prop('checked') ){
+					$("#bigCities").prop('checked', false);
+				}
+			});
+
 			// USPERT User -----------------------------------------------------------------------------
 			$.ajax({
 				headers: {
@@ -433,6 +444,9 @@
 				query += "&checkBeach=" + $("#checkBeach").prop("checked");
 				query += "&checkMountain=" + $("#checkMountain").prop("checked");
 				query += "&checkTurist=" + $("#checkTurist").prop("checked");
+
+				query += "&bigCities=" + $("#bigCities").prop("checked");
+				query += "&smallCities=" + $("#smallCities").prop("checked");
 
 				query += "&distance=" + $("#distance").val();
 
@@ -491,8 +505,10 @@
 				var routeNum = $(this)[0].id.substring(4,5);
 				delete routes[routeNum-1]["id"];
 				delete routes[routeNum-1]["steps"];
+/*
 				delete routes[routeNum-1]["lon"];
 				delete routes[routeNum-1]["lat"];
+*/
 				delete routes[routeNum-1]["users"];
 
 				// Hide like button
@@ -502,6 +518,7 @@
 					userName : $("#username").html(),
 					route : {
 						name : routes[routeNum-1].name,
+						nStopOver : routes[routeNum-1].nStopOver,
 						distance : routes[routeNum-1].distance,
 						departure : routes[routeNum-1].departure,
 						departureCountry : routes[routeNum-1].departureCountry,
@@ -509,7 +526,12 @@
 						indNightlife : routes[routeNum-1].indNightlife,
 						indCulture : routes[routeNum-1].indCulture,
 						indMountain : routes[routeNum-1].indMountain,
-						indTourist : routes[routeNum-1].indTourist
+						indTourist : routes[routeNum-1].indTourist,
+						bigCities : routes[routeNum-1].bigCities,
+						smallCities : routes[routeNum-1].smallCities,
+						lat : routes[routeNum-1].lat,
+						lon : routes[routeNum-1].lon,
+						round : routes[routeNum-1].round
 					}
 				}
 				$.ajax({
