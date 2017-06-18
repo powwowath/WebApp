@@ -8,6 +8,8 @@ import javax.persistence.Query;
 import javax.xml.soap.Node;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Created by Gerard on 28/05/2017.
@@ -18,6 +20,7 @@ public class Neo4JService {
     private static final int MAX_RESULTS = 6;
     private static final int RELATIONSHIP_BIG_CITY = 150;
     private static final int RELATIONSHIP_SMALL_CITY = 75;
+    private static final int CATEGORY_THRESHOLD = 30;
 
     Driver driver = GraphDatabase.driver( "bolt://localhost:7687", AuthTokens.basic( USERNAME, PASSWORD ) );
 
@@ -36,12 +39,30 @@ public class Neo4JService {
             boolean checkTurist,
             String distance
     ) {
+
+        List<Route> routes = getRoutesLike(departure, departureCountry, isRound, steps, isBigCities, isSmallCities, checkCulture, checkNight, checkBeach, checkMountain, checkTurist, distance);
+        List<Route> routesNew = new ArrayList<>();
+
+        int i = 0;
+        while ( routes.size() < MAX_RESULTS && i < 20){
+            routesNew = getRoutesN(departure, departureCountry, isRound, steps, isBigCities, isSmallCities, checkCulture, checkNight, checkBeach, checkMountain, checkTurist, distance, 1);
+
+            if(routesNew.size() > 0) {
+                if (!routes.contains(routesNew.get(0))) {
+                    routes.add(routesNew.get(0));
+                }
+            }
+            i++;
+        }
+
+/*
         List<Route> routes = getRoutesLike(departure, departureCountry, isRound, steps, isBigCities, isSmallCities, checkCulture, checkNight, checkBeach, checkMountain, checkTurist, distance);
         List<Route> routesNew = getRoutesN(departure, departureCountry, isRound, steps, isBigCities, isSmallCities, checkCulture, checkNight, checkBeach, checkMountain, checkTurist, distance, MAX_RESULTS - routes.size());
 
         for (int i = 0; i < routesNew.size(); i++){
             routes.add(routesNew.get(i));
         }
+*/
 
         driver.close();
 
@@ -89,11 +110,11 @@ public class Neo4JService {
             String whereBigSmallCities = "";
             for(int i = 1; i <= steps; i++) {
                 query += " MATCH (a"+(i+1)+":Airport)-[]-(c"+(i+1)+":City)";
-                if (checkBeach) wherePcts += " AND c"+(i+1)+".pctBeach > " + (40/numChecks);
-                if (checkCulture) wherePcts += " AND c"+(i+1)+".pctCultural > " + (40/numChecks);
-                if (checkMountain) wherePcts += " AND c"+(i+1)+".pctMountain > " + (30/numChecks);
-                if (checkNight) wherePcts += " AND c"+(i+1)+".pctNightlife > " + (40/numChecks);
-                if (checkTurist) wherePcts += " AND c"+(i+1)+".pctTourist > " + (40/numChecks);
+                if (checkBeach) wherePcts += " AND c"+(i+1)+".pctBeach > " + (CATEGORY_THRESHOLD/numChecks);
+                if (checkCulture) wherePcts += " AND c"+(i+1)+".pctCultural > " + (CATEGORY_THRESHOLD/numChecks);
+                if (checkMountain) wherePcts += " AND c"+(i+1)+".pctMountain > " + (CATEGORY_THRESHOLD/numChecks);
+                if (checkNight) wherePcts += " AND c"+(i+1)+".pctNightlife > " + (CATEGORY_THRESHOLD/numChecks);
+                if (checkTurist) wherePcts += " AND c"+(i+1)+".pctTourist > " + (CATEGORY_THRESHOLD/numChecks);
 
                 whereDistance += " + r"+(i+1)+".distance";
                 if (isBigCities) {
@@ -101,10 +122,13 @@ public class Neo4JService {
                 }
                 if (isSmallCities){
                     whereBigSmallCities += " AND size((a"+(i+1)+":Airport)-[:flights]-(:Airport)) < " + RELATIONSHIP_SMALL_CITY;
+                    whereBigSmallCities += " AND size((c"+(i+1)+":City)-[:belongs]-(:Airport)) = 1 ";
                 }
 
                 if (i == steps){
-                    query += " WHERE ";
+//                    query += " WHERE  ";
+                    int randomNum = ThreadLocalRandom.current().nextInt(0, 10);
+                    query += " WHERE ID(c2)%10 >= " + (randomNum-1)+ " AND ID(c2)%10 <= " + (randomNum+1) + " AND ";
                     if (isRound) {
                         query += "(a" + (i + 2) + ":Airport)-[]-(c1:City) ";
                     } else {
@@ -130,11 +154,10 @@ public class Neo4JService {
             }
             query += " AND c1.name = \""+departure+"\" AND c1.country = \""+departureCountry+"\"";
 
-            query += " RETURN DISTINCT c1, a1, r1";
+            query += " RETURN DISTINCT c1, a1, r1 ";
             for(int i = 1; i <= steps; i++) {
                 query += ", c"+(i+1)+", a"+(i+1)+", r"+(i+1)+" ";
             }
-
             query += " LIMIT " + limit;
 
             System.out.println("");
@@ -231,13 +254,16 @@ public class Neo4JService {
 
         try ( Session session = driver.session() )
         {
-            String query = "MATCH (r:Route) ";
+            String query = "MATCH (r:Route) WITH r, rand() AS ran ";
             query += "WHERE r.departure = \"" + departure + "\" ";
             query += "AND r.departureCountry = \"" + departureCountry + "\" ";
             query += "AND r.nStopOver = " + steps + " ";
             query += "AND r.isRound = " + isRound + " ";
-            query += "AND r.isBigCities = " + isBigCities + " ";
-            query += "AND r.isSmallCities = " + isSmallCities + " ";
+            if (isBigCities)
+                query += "AND r.isBigCities = " + isBigCities + " ";
+            if (isSmallCities)
+                query += "AND r.isSmallCities = " + isSmallCities + " ";
+
             switch (distance){
                 case "S": query += "AND r.distance < 2000 ";
                     break;
@@ -250,8 +276,25 @@ public class Neo4JService {
             }
 
             // TODO: Categories
+            int numChecks = 0;
+            if (checkBeach) numChecks++;
+            if (checkCulture) numChecks++;
+            if (checkMountain) numChecks++;
+            if (checkNight) numChecks++;
+            if (checkTurist) numChecks++;
 
-            query += "RETURN r LIMIT 2";
+            if (checkBeach)
+                query += "AND r.indBeach >= " + (CATEGORY_THRESHOLD / numChecks) + " ";
+            if (checkCulture)
+                query += "AND r.indCulture >= " + (CATEGORY_THRESHOLD / numChecks) + " ";
+            if (checkMountain)
+                query += "AND r.indMountain >= " + (CATEGORY_THRESHOLD / numChecks) + " ";
+            if (checkNight)
+                query += "AND r.indNightlife >= " + (CATEGORY_THRESHOLD / numChecks) + " ";
+            if (checkTurist)
+                query += "AND r.indTourist >= " + (CATEGORY_THRESHOLD / numChecks) + " ";
+
+            query += "RETURN r ORDER BY ran LIMIT 2";
 
 
             System.out.println("");
@@ -277,7 +320,6 @@ public class Neo4JService {
                 r.setIndTourist(rl.get(i).get(0).get("indTourist").asInt());
                 r.setIndNightlife(rl.get(i).get(0).get("indNightlife").asInt());
 
-// TODO: Guardar coords
                 r.setLat(rl.get(i).get(0).get("lat").asList().toArray(new String[rl.get(i).get(0).get("lat").asList().size()]));
                 r.setLon(rl.get(i).get(0).get("lon").asList().toArray(new String[rl.get(i).get(0).get("lon").asList().size()]));
 
@@ -289,4 +331,25 @@ public class Neo4JService {
         return routes;
     }
 
+    /**
+     * Returns a psuedo-random number between min and max, inclusive.
+     * The difference between min and max can be at most
+     * <code>Integer.MAX_VALUE - 1</code>.
+     *
+     * @param min Minimim value
+     * @param max Maximim value.  Must be greater than min.
+     * @return Integer between min and max, inclusive.
+     * @see java.util.Random#nextInt(int)
+     */
+    private static int randInt(int min, int max) {
+
+        // Usually this can be a field rather than a method variable
+        Random rand = new Random();
+
+        // nextInt is normally exclusive of the top value,
+        // so add 1 to make it inclusive
+        int randomNum = rand.nextInt((max - min) + 1) + min;
+
+        return randomNum;
+    }
 }
