@@ -28,11 +28,11 @@ public class Route {
 //    @Transient
     private String lat[];
 
-    private int indTourist;
-    private int indNightlife;
-    private int indCulture;
-    private int indBeach;
-    private int indMountain;
+    private double indTourist;
+    private double indNightlife;
+    private double indCulture;
+    private double indBeach;
+    private double indMountain;
 
     private boolean isBigCities;
     private boolean isSmallCities;
@@ -99,43 +99,43 @@ public class Route {
         this.lat = lat;
     }
 
-    public int getIndTourist() {
+    public double getIndTourist() {
         return indTourist;
     }
 
-    public void setIndTourist(int indTourist) {
+    public void setIndTourist(double indTourist) {
         this.indTourist = indTourist;
     }
 
-    public int getIndNightlife() {
+    public double getIndNightlife() {
         return indNightlife;
     }
 
-    public void setIndNightlife(int indNightlife) {
+    public void setIndNightlife(double indNightlife) {
         this.indNightlife = indNightlife;
     }
 
-    public int getIndCulture() {
+    public double getIndCulture() {
         return indCulture;
     }
 
-    public void setIndCulture(int indCulture) {
+    public void setIndCulture(double indCulture) {
         this.indCulture = indCulture;
     }
 
-    public int getIndBeach() {
+    public double getIndBeach() {
         return indBeach;
     }
 
-    public void setIndBeach(int indBeach) {
+    public void setIndBeach(double indBeach) {
         this.indBeach = indBeach;
     }
 
-    public int getIndMountain() {
+    public double getIndMountain() {
         return indMountain;
     }
 
-    public void setIndMountain(int indMountain) {
+    public void setIndMountain(double indMountain) {
         this.indMountain = indMountain;
     }
 
