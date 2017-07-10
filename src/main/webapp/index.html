@@ -113,7 +113,6 @@
 										<option value="2">2</option>
 										<option value="3">3</option>
 										<option value="4">4</option>
-										<option value="5">5</option>
 									</select>
 								</div>
 								<br/><br/>
@@ -189,7 +188,7 @@
 				 https://developers.google.com/maps/documentation/javascript/tutorial#api_key
 				 After your sign up replace the key in the URL below..
 				-->
-				<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDQTpXj82d8UpCi97wzo_nKXL7nYrd4G70"></script>
+				<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA8Nf5_AhALJ6kGWsoPdDVchMOF9tR0KGc"></script>
 
 
 
@@ -313,7 +312,15 @@
 							</div>
 						</div>
 					</div>
-
+					<!--div class="col-md-12">
+						<div class="ibox">
+							<div class="ibox-content product-box">
+								<div class="product-desc">
+									<a class="btn btn-danger btn-xs" id="more">&#160;More</a>
+								</div>
+							</div>
+						</div>
+					</div-->
 				</div>
 			</div>
 
@@ -449,6 +456,8 @@
 				query += "&smallCities=" + $("#smallCities").prop("checked");
 
 				query += "&distance=" + $("#distance").val();
+
+				$(".likeBtn").show();
 
 				$("#route1").hide();
 				$("#route2").hide();

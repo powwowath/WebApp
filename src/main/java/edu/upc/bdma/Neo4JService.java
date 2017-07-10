@@ -19,8 +19,9 @@ public class Neo4JService {
     private static final String PASSWORD = "neo";
     private static final int MAX_RESULTS = 6;
     private static final int RELATIONSHIP_BIG_CITY = 150;
-    private static final int RELATIONSHIP_SMALL_CITY = 75;
-    private static final int CATEGORY_THRESHOLD = 30;
+    private static final int RELATIONSHIP_SMALL_CITY = 50;
+    private static final double CATEGORY_THRESHOLD_SINGLE = 1;
+    private static final double CATEGORY_THRESHOLD_MULTIPLE = 0;
 
     Driver driver = GraphDatabase.driver( "bolt://localhost:7687", AuthTokens.basic( USERNAME, PASSWORD ) );
 
@@ -40,29 +41,29 @@ public class Neo4JService {
             String distance
     ) {
 
-        List<Route> routes = getRoutesLike(departure, departureCountry, isRound, steps, isBigCities, isSmallCities, checkCulture, checkNight, checkBeach, checkMountain, checkTurist, distance);
-        List<Route> routesNew = new ArrayList<>();
+//        List<Route> routes = getRoutesLike(departure, departureCountry, isRound, steps, isBigCities, isSmallCities, checkCulture, checkNight, checkBeach, checkMountain, checkTurist, distance);
+//        List<Route> routesNew = new ArrayList<>();
+//
+//        int i = 0;
+//        while ( routes.size() < MAX_RESULTS && i < 20){
+//            routesNew = getRoutesN(departure, departureCountry, isRound, steps, isBigCities, isSmallCities, checkCulture, checkNight, checkBeach, checkMountain, checkTurist, distance, 1);
+//
+//            if(routesNew.size() > 0) {
+//                if (!routes.contains(routesNew.get(0))) {
+//                    routes.add(routesNew.get(0));
+//                }
+//            }
+//            i++;
+//        }
 
-        int i = 0;
-        while ( routes.size() < MAX_RESULTS && i < 20){
-            routesNew = getRoutesN(departure, departureCountry, isRound, steps, isBigCities, isSmallCities, checkCulture, checkNight, checkBeach, checkMountain, checkTurist, distance, 1);
 
-            if(routesNew.size() > 0) {
-                if (!routes.contains(routesNew.get(0))) {
-                    routes.add(routesNew.get(0));
-                }
-            }
-            i++;
-        }
-
-/*
         List<Route> routes = getRoutesLike(departure, departureCountry, isRound, steps, isBigCities, isSmallCities, checkCulture, checkNight, checkBeach, checkMountain, checkTurist, distance);
         List<Route> routesNew = getRoutesN(departure, departureCountry, isRound, steps, isBigCities, isSmallCities, checkCulture, checkNight, checkBeach, checkMountain, checkTurist, distance, MAX_RESULTS - routes.size());
 
         for (int i = 0; i < routesNew.size(); i++){
             routes.add(routesNew.get(i));
         }
-*/
+        
 
         driver.close();
 
@@ -96,6 +97,53 @@ public class Neo4JService {
             if (checkNight) numChecks++;
             if (checkTurist) numChecks++;
 
+// RANDOM ROUTES -----------
+/*
+            int candidates = 50;
+            String queryWith = "c1, a1, r1";
+            String queryRandom = "MATCH (c1:City)-[]-(a1:Airport)-[r1]->(a2:Airport) ";
+            queryRandom += "MATCH (c2:City)<-[]-(a2:Airport) ";
+            queryRandom += "WHERE c1.name = \"" + departure + "\" AND c1.country = \"" + departureCountry + "\" ";
+            queryRandom += "WITH "+queryWith+" ORDER BY rand() LIMIT " + candidates + " ";
+
+            // Intermediate steps
+            for(int i = 1; i < steps; i++) {
+                queryWith += ", c" + (i+1) + ", a\" + (i+1) + \", r\" + (i+1) + \"";
+                queryRandom += "MATCH (a" + (i + 1) + ":Airport)-[r" + (i + 1) + "]->(a" + (i + 2) + ":Airport)";
+                queryRandom += "MATCH (c"+ (i+2) +":City)<-[]-(a" + (i + 2) + ":Airport) ";
+                if ((i+1) == steps){
+                    queryRandom += "WITH "+queryWith+" ORDER BY rand() LIMIT 6";
+                } else {
+                    queryRandom += "WITH "+queryWith+" ORDER BY rand() LIMIT " + (candidates*(i+1)) + " ";
+                }
+            }
+
+            queryRandom += " RETURN DISTINCT " + queryWith;
+
+            //RETURN c1, a1, r1
+
+
+
+            MATCH (a2:Airport)-[r2]-(a3:Airport)
+            MATCH (c3:City)-[]-(a3:Airport)
+            WITH c1,a1,c2,a2,c3,a3 ORDER BY rand() LIMIT 100
+
+            MATCH (a3:Airport)-[]-(a4:Airport)
+            MATCH (c4:City)-[]-(a4:Airport)
+            WITH c1,a1,c2,a2,c3,a3,c4,a4 ORDER BY rand() LIMIT 200
+
+            MATCH (a4:Airport)-[]-(a5:Airport)
+            MATCH (c5:City)-[]-(a5:Airport)
+            WITH c1,a1,c2,a2,c3,a3,c4,a4,c5,a5 ORDER BY rand() LIMIT 400
+            MATCH (a5:Airport)-[]-(a6:Airport)
+            WHERE (c1:City)-[]-(a6:Airport)
+            WITH c1,a1,c2,a2,c3,a3,c4,a4,c5,a5,a6 ORDER BY rand() LIMIT 6
+            RETURN DISTINCT c1.name,c2.name,c3.name,c4.name,c5.name,a6.city;
+*/
+// RANDOM ROUTES -----------
+
+
+
             String query = "MATCH (c1:City)-[]-(a1:Airport)-[r1]->";
 
             // Intermediate steps
@@ -108,27 +156,35 @@ public class Neo4JService {
             String whereDistance = " AND (r1.distance";
             String wherePcts = "";
             String whereBigSmallCities = "";
+            
+            double category_threshold = -10;
+            if (numChecks == 1) category_threshold = CATEGORY_THRESHOLD_SINGLE;
+            if (numChecks > 1) category_threshold = CATEGORY_THRESHOLD_MULTIPLE;
+            
             for(int i = 1; i <= steps; i++) {
                 query += " MATCH (a"+(i+1)+":Airport)-[]-(c"+(i+1)+":City)";
-                if (checkBeach) wherePcts += " AND c"+(i+1)+".pctBeach > " + (CATEGORY_THRESHOLD/numChecks);
-                if (checkCulture) wherePcts += " AND c"+(i+1)+".pctCultural > " + (CATEGORY_THRESHOLD/numChecks);
-                if (checkMountain) wherePcts += " AND c"+(i+1)+".pctMountain > " + (CATEGORY_THRESHOLD/numChecks);
-                if (checkNight) wherePcts += " AND c"+(i+1)+".pctNightlife > " + (CATEGORY_THRESHOLD/numChecks);
-                if (checkTurist) wherePcts += " AND c"+(i+1)+".pctTourist > " + (CATEGORY_THRESHOLD/numChecks);
+                if (checkBeach) wherePcts += " AND c"+(i+1)+".pctBeach > " + category_threshold;
+                if (checkCulture) wherePcts += " AND c"+(i+1)+".pctCultural > " + category_threshold;
+                if (checkMountain) wherePcts += " AND c"+(i+1)+".pctMountain > " + category_threshold;
+                if (checkNight) wherePcts += " AND c"+(i+1)+".pctNightlife > " + category_threshold;
+                if (checkTurist) wherePcts += " AND c"+(i+1)+".pctTourist > " + category_threshold;
 
                 whereDistance += " + r"+(i+1)+".distance";
+                
                 if (isBigCities) {
-                    whereBigSmallCities += " AND size((a"+(i+1)+":Airport)-[:flights]-(:Airport)) > " + RELATIONSHIP_BIG_CITY;
+                    whereBigSmallCities += " AND (size((a"+(i+1)+":Airport)-[:flights]-(:Airport)) > " + RELATIONSHIP_BIG_CITY;
+                    whereBigSmallCities += " OR size((c"+(i+1)+":City)-[:belongs]-(:Airport)) = 1) ";
                 }
+                
                 if (isSmallCities){
                     whereBigSmallCities += " AND size((a"+(i+1)+":Airport)-[:flights]-(:Airport)) < " + RELATIONSHIP_SMALL_CITY;
                     whereBigSmallCities += " AND size((c"+(i+1)+":City)-[:belongs]-(:Airport)) = 1 ";
                 }
 
                 if (i == steps){
-//                    query += " WHERE  ";
-                    int randomNum = ThreadLocalRandom.current().nextInt(0, 10);
-                    query += " WHERE ID(c2)%10 >= " + (randomNum-1)+ " AND ID(c2)%10 <= " + (randomNum+1) + " AND ";
+                    query += " WHERE  ";
+//                    int randomNum = ThreadLocalRandom.current().nextInt(0, 10);
+//                    query += " WHERE ID(c2)%10 >= " + (randomNum-1)+ " AND ID(c2)%10 <= " + (randomNum+1) + " AND ";
                     if (isRound) {
                         query += "(a" + (i + 2) + ":Airport)-[]-(c1:City) ";
                     } else {
@@ -158,7 +214,7 @@ public class Neo4JService {
             for(int i = 1; i <= steps; i++) {
                 query += ", c"+(i+1)+", a"+(i+1)+", r"+(i+1)+" ";
             }
-            query += " LIMIT " + limit;
+            query += "ORDER BY rand() LIMIT " + limit;
 
             System.out.println("");
             System.out.println("Query: "+query);
@@ -171,11 +227,11 @@ public class Neo4JService {
             for(int i = 0; i < rl.size(); i++){
                 Route r = new Route();
                 double rDistance = 0;
-                int pctTourist = 0;
-                int pctNightlife = 0;
-                int pctCulture = 0;
-                int pctBeach = 0;
-                int pctMountain = 0;
+                double pctTourist = 0;
+                double pctNightlife = 0;
+                double pctCulture = 0;
+                double pctBeach = 0;
+                double pctMountain = 0;
 
                 int extraPoints = 2;
                 if(!isRound){
@@ -197,11 +253,11 @@ public class Neo4JService {
                     lon[j] = "" + rl.get(i).get((j*3)+1).get("lon");
                     lat[j] = "" + rl.get(i).get((j*3)+1).get("lat");
                     rDistance += rl.get(i).get((j*3)+2).get("distance").asDouble();
-                    pctBeach += rl.get(i).get((j*3)).get("pctBeach").asInt();
-                    pctMountain += rl.get(i).get((j*3)).get("pctMountain").asInt();
-                    pctTourist += rl.get(i).get((j*3)).get("pctTourist").asInt();
-                    pctNightlife += rl.get(i).get((j*3)).get("pctNightlife").asInt();
-                    pctCulture += rl.get(i).get((j*3)).get("pctCultural").asInt();
+                    pctBeach += rl.get(i).get((j*3)).get("pctBeach").asDouble();
+                    pctMountain += rl.get(i).get((j*3)).get("pctMountain").asDouble();
+                    pctTourist += rl.get(i).get((j*3)).get("pctTourist").asDouble();
+                    pctNightlife += rl.get(i).get((j*3)).get("pctNightlife").asDouble();
+                    pctCulture += rl.get(i).get((j*3)).get("pctCultural").asDouble();
                 }
 
                 if (isRound) {
@@ -282,17 +338,21 @@ public class Neo4JService {
             if (checkMountain) numChecks++;
             if (checkNight) numChecks++;
             if (checkTurist) numChecks++;
-
+            
+            double category_threshold = -10;
+            if (numChecks == 1) category_threshold = CATEGORY_THRESHOLD_SINGLE;
+            if (numChecks > 1) category_threshold = CATEGORY_THRESHOLD_MULTIPLE;
+            
             if (checkBeach)
-                query += "AND r.indBeach >= " + (CATEGORY_THRESHOLD / numChecks) + " ";
+                query += "AND r.indBeach >= " + category_threshold + " ";
             if (checkCulture)
-                query += "AND r.indCulture >= " + (CATEGORY_THRESHOLD / numChecks) + " ";
+                query += "AND r.indCulture >= " + category_threshold + " ";
             if (checkMountain)
-                query += "AND r.indMountain >= " + (CATEGORY_THRESHOLD / numChecks) + " ";
+                query += "AND r.indMountain >= " + category_threshold + " ";
             if (checkNight)
-                query += "AND r.indNightlife >= " + (CATEGORY_THRESHOLD / numChecks) + " ";
+                query += "AND r.indNightlife >= " + category_threshold + " ";
             if (checkTurist)
-                query += "AND r.indTourist >= " + (CATEGORY_THRESHOLD / numChecks) + " ";
+                query += "AND r.indTourist >= " + category_threshold + " ";
 
             query += "RETURN r ORDER BY ran LIMIT 2";
 
@@ -314,11 +374,11 @@ public class Neo4JService {
                 r.setRound(rl.get(i).get(0).get("isRound").asBoolean());
                 r.setnStopOver(rl.get(i).get(0).get("nStopOver").asInt());
                 r.setDistance(rl.get(i).get(0).get("distance").asDouble());
-                r.setIndBeach(rl.get(i).get(0).get("indBeach").asInt());
-                r.setIndMountain(rl.get(i).get(0).get("indMountain").asInt());
-                r.setIndCulture(rl.get(i).get(0).get("indCulture").asInt());
-                r.setIndTourist(rl.get(i).get(0).get("indTourist").asInt());
-                r.setIndNightlife(rl.get(i).get(0).get("indNightlife").asInt());
+                r.setIndBeach(rl.get(i).get(0).get("indBeach").asDouble());
+                r.setIndMountain(rl.get(i).get(0).get("indMountain").asDouble());
+                r.setIndCulture(rl.get(i).get(0).get("indCulture").asDouble());
+                r.setIndTourist(rl.get(i).get(0).get("indTourist").asDouble());
+                r.setIndNightlife(rl.get(i).get(0).get("indNightlife").asDouble());
 
                 r.setLat(rl.get(i).get(0).get("lat").asList().toArray(new String[rl.get(i).get(0).get("lat").asList().size()]));
                 r.setLon(rl.get(i).get(0).get("lon").asList().toArray(new String[rl.get(i).get(0).get("lon").asList().size()]));
@@ -339,7 +399,7 @@ public class Neo4JService {
      * @param min Minimim value
      * @param max Maximim value.  Must be greater than min.
      * @return Integer between min and max, inclusive.
-     * @see java.util.Random#nextInt(int)
+     * @see Random#nextInt(int)
      */
     private static int randInt(int min, int max) {
 
